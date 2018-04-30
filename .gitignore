@@ -1,0 +1,7 @@
+.gradle
+javafxdemo.iml
+javafxdemo.ipr
+javafxdemo.iws
+build
+.idea
+out
