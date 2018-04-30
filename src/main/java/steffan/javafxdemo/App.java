@@ -1,6 +1,7 @@
 package steffan.javafxdemo;
 
 public class App {
+
     String getGreeting() {
         var msg = "Hello world!";
         return msg;
