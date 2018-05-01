@@ -23,7 +23,7 @@ javaModule.extraTestModules = ['junit', 'hamcrest.core', 'org.mockito']
 test {
     doFirst {
         jvmArgs += [
-            '--add-exports', "${javaModule.name}/steffan.javafxdemo.app.main=junit",
+            '--add-opens', "${javaModule.name}/steffan.javafxdemo.app.main=junit",
         ]
     }
 }
