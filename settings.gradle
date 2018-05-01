@@ -8,3 +8,6 @@
  */
 
 rootProject.name = 'javafxdemo'
+
+include 'javafxdemo-app'
+include 'javafxdemo-fxview'

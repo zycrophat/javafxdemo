@@ -1,7 +1,7 @@
 .gradle
-javafxdemo.iml
-javafxdemo.ipr
-javafxdemo.iws
+*.iml
+*.ipr
+*.iws
 build
 .idea
 out

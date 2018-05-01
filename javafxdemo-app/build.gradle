@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+}
+
+//project.sourceCompatibility = 1.10
+//project.targetCompatibility = 1.10
+
+mainClassName = 'steffan.javafxdemo.app.main.Main'
+
+dependencies {
+    compile 'com.google.guava:guava:23.0'
+
+    runtimeOnly project(':javafxdemo-fxview')
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.+'
+}
+
+javaModule.name = 'steffan.javafxdemo.app'
+
+javaModule.extraTestModules = ['junit', 'hamcrest.core', 'org.mockito']
+
+test {
+    doFirst {
+        jvmArgs += [
+            '--add-exports', "${javaModule.name}/steffan.javafxdemo.app.main=junit",
+        ]
+    }
+}
