@@ -1,7 +1,13 @@
-import steffan.javafxdemo.app.api.view.View;
-import steffan.javafxdemo.app.api.view.fximpl.FXView;
+import steffan.javafxdemo.view.api.ViewManager;
+import steffan.javafxdemo.view.fximpl.FXViewManager;
 
 module steffan.javafxdemo.fxview {
     requires steffan.javafxdemo.app;
-    provides View with FXView;
+    requires javafx.controls;
+    requires javafx.fxml;
+
+    exports steffan.javafxdemo.view.fximpl to javafx.graphics, javafx.fxml;
+    opens steffan.javafxdemo.view.fximpl to javafx.fxml;
+
+    provides ViewManager with FXViewManager;
 }

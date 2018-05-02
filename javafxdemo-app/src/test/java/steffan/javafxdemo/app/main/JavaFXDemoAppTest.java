@@ -2,7 +2,7 @@ package steffan.javafxdemo.app.main;
 
 
 import org.junit.Test;
-import steffan.javafxdemo.app.api.view.View;
+import steffan.javafxdemo.view.api.ViewManager;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -12,16 +12,16 @@ public class JavaFXDemoAppTest {
 
     @Test
     public void testAppIsInitialized() {
-        View view = mock(View.class);
+        ViewManager viewManager = mock(ViewManager.class);
 
-        JavaFXDemoApp app = new JavaFXDemoApp(() -> view);
+        JavaFXDemoApp app = new JavaFXDemoApp(() -> viewManager);
 
         assertThat(app.isInitialized(), is(false));
-        assertThat(app.view, is(nullValue()));
+        assertThat(app.getViewManager(), is(nullValue()));
 
         app.initialize();
 
         assertThat(app.isInitialized(), is(true));
-        assertThat(app.view, is(notNullValue()));
+        assertThat(app.getViewManager(), is(notNullValue()));
     }
 }

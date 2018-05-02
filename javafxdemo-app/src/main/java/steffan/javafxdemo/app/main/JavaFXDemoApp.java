@@ -1,6 +1,10 @@
 package steffan.javafxdemo.app.main;
 
-import steffan.javafxdemo.app.api.view.View;
+import javafx.collections.FXCollections;
+import steffan.javafxdemo.app.domain.Contact;
+import steffan.javafxdemo.view.api.View;
+import steffan.javafxdemo.view.api.ViewException;
+import steffan.javafxdemo.view.api.ViewManager;
 
 import java.util.function.Supplier;
 
@@ -9,18 +13,18 @@ import static java.util.Objects.requireNonNull;
 
 public class JavaFXDemoApp {
 
-    private Supplier<View> viewSupplier;
+    private Supplier<ViewManager> viewSupplier;
 
-    View view;
+    private ViewManager viewManager;
 
     private boolean isInitialized = false;
 
-    public JavaFXDemoApp(Supplier<View> viewSupplier) {
+    public JavaFXDemoApp(Supplier<ViewManager> viewSupplier) {
         this.viewSupplier = requireNonNull(viewSupplier, "viewSupplier required");
     }
 
     public void initialize() {
-        view = requireNonNull(viewSupplier.get(), "view is null");
+        viewManager = requireNonNull(viewSupplier.get(), "viewManager is null");
 
         setInitialized(true);
     }
@@ -30,7 +34,17 @@ public class JavaFXDemoApp {
             throw new IllegalStateException("App not initialized");
         }
 
-        view.show();
+        try {
+            viewManager.initialize();
+            var contactsView = viewManager.createContactsView();
+            contactsView.setModel(FXCollections.observableArrayList(
+                    new Contact(1, "Andreas", "Steffan")
+            ));
+            contactsView.show();
+        } catch (ViewException e) {
+            e.printStackTrace();
+            System.exit(666);
+        }
     }
 
     public boolean isInitialized() {
@@ -40,4 +54,9 @@ public class JavaFXDemoApp {
     public void setInitialized(boolean initialized) {
         isInitialized = initialized;
     }
+
+    ViewManager getViewManager() {
+        return viewManager;
+    }
+
 }

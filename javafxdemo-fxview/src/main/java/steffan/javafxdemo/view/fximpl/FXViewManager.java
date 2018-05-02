@@ -1,0 +1,53 @@
+package steffan.javafxdemo.view.fximpl;
+
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import steffan.javafxdemo.app.domain.Contact;
+import steffan.javafxdemo.view.api.View;
+import steffan.javafxdemo.view.api.ViewException;
+import steffan.javafxdemo.view.api.ViewManager;
+
+import java.io.IOException;
+import java.net.URL;
+
+public class FXViewManager implements ViewManager {
+
+    private Stage primaryStage;
+
+    @Override
+    public void initialize() throws ViewException {
+        JavaFXApplication.initialize(this);
+    }
+
+    @Override
+    public View<ObservableList<Contact>> createContactsView() throws ViewException {
+        URL resource = FXViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/ContactList.fxml");
+        FXMLLoader loader = new FXMLLoader(resource);
+        try {
+            Parent parent = loader.load();
+            JavaFXSceneController<ObservableList<Contact>> sceneController = loader.getController();
+            //sceneController.setModel(model);
+            sceneController.setFxViewManager(this);
+            Platform.runLater( () -> {
+                primaryStage.setScene(new Scene(parent));
+                primaryStage.setTitle("Contact list");
+            });
+
+            return new FXView<>(primaryStage, sceneController);
+        } catch (IOException e) {
+            throw new ViewException(e);
+        }
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+}

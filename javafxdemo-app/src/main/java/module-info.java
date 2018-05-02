@@ -1,7 +1,11 @@
-import steffan.javafxdemo.app.api.view.View;
+import steffan.javafxdemo.view.api.ViewManager;
 
 module steffan.javafxdemo.app {
-    exports steffan.javafxdemo.app.api.view;
 
-    uses View;
+    requires transitive javafx.base;
+
+    exports steffan.javafxdemo.view.api;
+    exports steffan.javafxdemo.app.domain;
+
+    uses ViewManager;
 }
