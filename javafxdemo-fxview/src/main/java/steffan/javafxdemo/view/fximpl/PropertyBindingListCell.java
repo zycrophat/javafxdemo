@@ -7,10 +7,10 @@ import java.util.function.Function;
 
 public class PropertyBindingListCell<T> extends ListCell<T> {
 
-    private Function<T, ObservableValue<String>> itemToObersableStringValue;
+    private Function<T, ObservableValue<String>> itemToObservableStringValue;
 
-    public PropertyBindingListCell(Function<T, ObservableValue<String>> itemToObersableStringValue) {
-        this.itemToObersableStringValue = itemToObersableStringValue;
+    PropertyBindingListCell(Function<T, ObservableValue<String>> itemToObservableStringValue) {
+        this.itemToObservableStringValue = itemToObservableStringValue;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class PropertyBindingListCell<T> extends ListCell<T> {
             textProperty().setValue(null);
             setGraphic(null);
         } else {
-            textProperty().bind(itemToObersableStringValue.apply(item));
+            textProperty().bind(itemToObservableStringValue.apply(item));
         }
     }
 
