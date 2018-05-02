@@ -17,12 +17,12 @@ public class FXView<T> implements View<T> {
 
     @Override
     public void show() {
-        Platform.runLater(() -> stage.show());
+        Platform.runLater(stage::show);
     }
 
     @Override
     public void hide() {
-        stage.hide();
+        Platform.runLater(stage::hide);
     }
 
     @Override
