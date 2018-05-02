@@ -5,11 +5,11 @@ import javafx.scene.control.ListCell;
 
 import java.util.function.Function;
 
-public class PropertyBindingListCell<T> extends ListCell<T> {
+public class ObservableStringValueBindingListCell<T> extends ListCell<T> {
 
     private Function<T, ObservableValue<String>> itemToObservableStringValue;
 
-    PropertyBindingListCell(Function<T, ObservableValue<String>> itemToObservableStringValue) {
+    ObservableStringValueBindingListCell(Function<T, ObservableValue<String>> itemToObservableStringValue) {
         this.itemToObservableStringValue = itemToObservableStringValue;
     }
 
