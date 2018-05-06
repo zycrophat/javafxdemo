@@ -7,7 +7,7 @@ import java.util.ServiceLoader;
 public class Main {
 
     public static void main(String[] args) {
-        JavaFXDemoApp app = new JavaFXDemoApp(ServiceLoader.load(ViewManager.class).findFirst()::get);
+        var app = new JavaFXDemoApp(ServiceLoader.load(ViewManager.class).findFirst()::get);
         app.initialize();
         app.start();
     }
