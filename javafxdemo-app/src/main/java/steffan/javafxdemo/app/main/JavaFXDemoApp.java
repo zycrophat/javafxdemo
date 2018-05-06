@@ -51,7 +51,7 @@ public class JavaFXDemoApp {
         return isInitialized;
     }
 
-    public void setInitialized(boolean initialized) {
+    private void setInitialized(boolean initialized) {
         isInitialized = initialized;
     }
 
