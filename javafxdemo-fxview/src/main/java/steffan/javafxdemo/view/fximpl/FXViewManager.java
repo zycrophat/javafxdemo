@@ -6,7 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import steffan.javafxdemo.app.domain.Contact;
+import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.view.api.View;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
@@ -24,12 +25,12 @@ public class FXViewManager implements ViewManager {
     }
 
     @Override
-    public View<ObservableList<Contact>> createContactsView() throws ViewException {
+    public View<ContactList> createContactsView() throws ViewException {
         URL resource = FXViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/ContactList.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         try {
             Parent parent = loader.load();
-            JavaFXSceneController<ObservableList<Contact>> sceneController = loader.getController();
+            JavaFXSceneController<ContactList> sceneController = loader.getController();
             //sceneController.setModel(model);
             sceneController.setFxViewManager(this);
             Platform.runLater( () -> {
