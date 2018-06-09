@@ -1,15 +1,9 @@
 package steffan.javafxdemo.view.fximpl;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringExpression;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import javafx.util.StringConverter;
 import steffan.javafxdemo.app.domain.Contact;
-
-import java.util.function.Supplier;
 
 public class ContactListController extends JavaFXSceneController<ObservableList<Contact>> {
 

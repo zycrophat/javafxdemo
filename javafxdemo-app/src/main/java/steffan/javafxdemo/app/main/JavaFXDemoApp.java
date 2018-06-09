@@ -2,7 +2,6 @@ package steffan.javafxdemo.app.main;
 
 import javafx.collections.FXCollections;
 import steffan.javafxdemo.app.domain.Contact;
-import steffan.javafxdemo.view.api.View;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
 
@@ -38,7 +37,8 @@ public class JavaFXDemoApp {
             viewManager.initialize();
             var contactsView = viewManager.createContactsView();
             contactsView.setModel(FXCollections.observableArrayList(
-                    new Contact(1, "Andreas", "Steffan")
+                    new Contact(1, "Andreas", "Steffan"),
+                    new Contact(2, "Thomas", "Müller")
             ));
             contactsView.show();
         } catch (ViewException e) {
