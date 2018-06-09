@@ -1,7 +1,11 @@
 package steffan.javafxdemo.app.main;
 
 import javafx.collections.FXCollections;
-import steffan.javafxdemo.app.domain.Contact;
+import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.domain.ContactList;
+import steffan.javafxdemo.persistence.api.PersistenceContext;
+import steffan.javafxdemo.persistence.api.PersistenceException;
+import steffan.javafxdemo.persistence.simplepersistence.SimplePersistenceContext;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
 
@@ -36,12 +40,16 @@ public class JavaFXDemoApp {
         try {
             viewManager.initialize();
             var contactsView = viewManager.createContactsView();
-            contactsView.setModel(FXCollections.observableArrayList(
-                    new Contact(1, "Andreas", "Steffan"),
-                    new Contact(2, "Thomas", "Müller")
-            ));
+
+            PersistenceContext persistenceContext = new SimplePersistenceContext();
+            var repository = persistenceContext.getRepository(Contact.class).get();
+            repository.store(new Contact(1L, "Andreas", "Steffan"));
+            repository.store(new Contact(2L, "Thomas", "Müller"));
+            ContactList contactList = new ContactList(persistenceContext);
+            contactList.load();
+            contactsView.setModel(contactList);
             contactsView.show();
-        } catch (ViewException e) {
+        } catch (ViewException | PersistenceException e) {
             e.printStackTrace();
             System.exit(666);
         }

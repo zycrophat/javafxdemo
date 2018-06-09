@@ -14,11 +14,15 @@
   </rowConstraints>
    <children>
       <ListView fx:id="contactsListView" prefHeight="200.0" prefWidth="200.0" />
-      <Button mnemonicParsing="false" text="Button" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <HBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
-      </Button>
+         <children>
+            <Button mnemonicParsing="false" onAction="#loadContactList" text="Load" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveContactList" text="Save" />
+         </children>
+      </HBox>
    </children>
    <opaqueInsets>
       <Insets />
