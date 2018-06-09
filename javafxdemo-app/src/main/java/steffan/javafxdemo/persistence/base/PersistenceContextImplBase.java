@@ -13,6 +13,8 @@ public abstract class PersistenceContextImplBase implements PersistenceContext {
 
     private Map<Class<? extends DomainObject>, Repository<? extends DomainObject>> classRepositoryMap;
 
+    private UnitOfWork currentUnitOfWork;
+
     public PersistenceContextImplBase() {
         this.classRepositoryMap = new HashMap<>();
     }
@@ -28,6 +30,16 @@ public abstract class PersistenceContextImplBase implements PersistenceContext {
 
     @Override
     public UnitOfWork createUnitOfWork() {
-        return new UnitOfWorkBaseImpl();
+        return new UnitOfWorkBaseImpl(this);
+    }
+
+    @Override
+    public UnitOfWork getCurrentUnitOfWork() {
+        return currentUnitOfWork;
+    }
+
+    @Override
+    public void setCurrentUnitOfWork(UnitOfWork unitOfWork) {
+        this.currentUnitOfWork = unitOfWork;
     }
 }

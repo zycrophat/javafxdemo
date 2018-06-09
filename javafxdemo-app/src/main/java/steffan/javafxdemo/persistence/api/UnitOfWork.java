@@ -10,7 +10,7 @@ public interface UnitOfWork {
 
     <T extends DomainObject> void markAsDeleted(T domainObject);
 
-    void commit(PersistenceContext context) throws PersistenceException;
+    void commit() throws PersistenceException;
 
     boolean isCommitted();
 }

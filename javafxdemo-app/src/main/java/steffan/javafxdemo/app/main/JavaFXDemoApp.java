@@ -1,6 +1,5 @@
 package steffan.javafxdemo.app.main;
 
-import javafx.collections.FXCollections;
 import steffan.javafxdemo.domain.Contact;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
@@ -9,39 +8,37 @@ import steffan.javafxdemo.persistence.simplepersistence.SimplePersistenceContext
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
 
-import java.util.function.Supplier;
-
 import static java.util.Objects.requireNonNull;
 
 
-public class JavaFXDemoApp {
-
-    private Supplier<ViewManager> viewSupplier;
+public class JavaFXDemoApp implements DemoApplication {
 
     private ViewManager viewManager;
+    private PersistenceContext persistenceContext;
 
     private boolean isInitialized = false;
 
-    public JavaFXDemoApp(Supplier<ViewManager> viewSupplier) {
-        this.viewSupplier = requireNonNull(viewSupplier, "viewSupplier required");
+    public JavaFXDemoApp(ViewManager viewManager, PersistenceContext persistenceContext) {
+        this.viewManager = requireNonNull(viewManager, "viewManager is null");
+        this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
     }
 
+    @Override
     public void initialize() {
-        viewManager = requireNonNull(viewSupplier.get(), "viewManager is null");
-
         setInitialized(true);
     }
 
+    @Override
     public void start() {
         if (!this.isInitialized()) {
             throw new IllegalStateException("App not initialized");
         }
 
         try {
-            viewManager.initialize();
+            viewManager.initialize(this);
             var contactsView = viewManager.createContactsView();
 
-            PersistenceContext persistenceContext = new SimplePersistenceContext();
+            persistenceContext = new SimplePersistenceContext();
             var repository = persistenceContext.getRepository(Contact.class).get();
             repository.store(new Contact(1L, "Andreas", "Steffan"));
             repository.store(new Contact(2L, "Thomas", "Müller"));
@@ -55,6 +52,7 @@ public class JavaFXDemoApp {
         }
     }
 
+    @Override
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -63,8 +61,14 @@ public class JavaFXDemoApp {
         isInitialized = initialized;
     }
 
-    ViewManager getViewManager() {
+    @Override
+    public ViewManager getViewManager() {
         return viewManager;
+    }
+
+    @Override
+    public PersistenceContext getPersistenceContext() {
+        return persistenceContext;
     }
 
 }

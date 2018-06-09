@@ -1,12 +1,11 @@
 package steffan.javafxdemo.view.api;
 
-import javafx.collections.ObservableList;
-import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.app.main.DemoApplication;
 import steffan.javafxdemo.domain.ContactList;
 
 public interface ViewManager {
 
-    void initialize() throws ViewException;
+    void initialize(DemoApplication demoApplication) throws ViewException;
 
     View<ContactList> createContactsView() throws ViewException;
 }

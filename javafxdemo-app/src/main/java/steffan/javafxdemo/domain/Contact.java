@@ -1,6 +1,7 @@
 package steffan.javafxdemo.domain;
 
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.util.Objects;
 

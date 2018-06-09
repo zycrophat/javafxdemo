@@ -5,12 +5,11 @@ import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.persistence.api.UnitOfWork;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class UnitOfWorkBaseImpl implements UnitOfWork {
+
+    private PersistenceContext context;
 
     private Map<Class<? extends DomainObject>, List<? extends DomainObject>> classToNewDomainObjectList;
     private Map<Class<? extends DomainObject>, List<? extends DomainObject>> classToModifiedDomainObjectList;
@@ -18,10 +17,11 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
 
     private boolean committed = false;
 
-    public UnitOfWorkBaseImpl() {
-        this.classToNewDomainObjectList = new TreeMap<>();
-        this.classToModifiedDomainObjectList = new TreeMap<>();
-        this.classToDeletedDomainObjectList = new TreeMap<>();
+    public UnitOfWorkBaseImpl(PersistenceContext context) {
+        this.context = context;
+        this.classToNewDomainObjectList = new HashMap<>();
+        this.classToModifiedDomainObjectList = new HashMap<>();
+        this.classToDeletedDomainObjectList = new HashMap<>();
     }
 
     @Override
@@ -67,42 +67,40 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     }
 
     @Override
-    public void commit(PersistenceContext context) throws PersistenceException {
-        context.doInTransaction(ctx -> {
-            if (!this.isCommitted()) {
-                insertNewDomainObjects(ctx);
-                updateModifiedDomainObjects(ctx);
-                deleteDeletedDomainObjects(ctx);
+    public void commit() throws PersistenceException {
+        if (!this.isCommitted()) {
+            insertNewDomainObjects();
+            updateModifiedDomainObjects();
+            deleteDeletedDomainObjects();
 
-                setCommitted(true);
-            } else {
-                throw new IllegalStateException("Cannot commit (already committed)");
-            }
-        });
+            setCommitted(true);
+        } else {
+            throw new IllegalStateException("Cannot commit (already committed)");
+        }
     }
 
-    private void insertNewDomainObjects(PersistenceContext ctx) throws PersistenceException {
+    private void insertNewDomainObjects() throws PersistenceException {
         for (var classListEntry : classToNewDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = ctx.getRepository(clazz)
+            var repository = context.getRepository(clazz)
                     .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
             repository.store(getListOfNewDomainObjectsByClass(clazz));
         }
     }
 
-    private void updateModifiedDomainObjects(PersistenceContext ctx) throws PersistenceException {
+    private void updateModifiedDomainObjects() throws PersistenceException {
         for (var classListEntry : classToModifiedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = ctx.getRepository(clazz)
+            var repository = context.getRepository(clazz)
                     .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
             repository.store(getListOfModifiedDomainObjectsByClass(clazz));
         }
     }
 
-    private void deleteDeletedDomainObjects(PersistenceContext ctx) throws PersistenceException {
+    private void deleteDeletedDomainObjects() throws PersistenceException {
         for (var classListEntry : classToDeletedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = ctx.getRepository(clazz)
+            var repository = context.getRepository(clazz)
                     .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
             repository.delete(getListOfNewDomainObjectsByClass(clazz));
         }

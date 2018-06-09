@@ -1,12 +1,12 @@
 package steffan.javafxdemo.view.fximpl;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import steffan.javafxdemo.domain.Contact;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceException;
+import steffan.javafxdemo.persistence.api.UnitOfWork;
 
 public class ContactListController extends JavaFXSceneController<ContactList> {
 
@@ -15,11 +15,13 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private Button saveButton;
+    private UnitOfWork unitOfWork;
 
     @Override
-    protected void bindModelToElements(ContactList model) {
+    protected void initialize(ContactList model) {
         saveButton.disableProperty().bind(model.modifiedProperty().not());
 
+        unitOfWork = getPersistenceContext().createUnitOfWork();
         contactsListView.setCellFactory(
                 listView -> new ObserveAndEditListCell<>(
                         contact ->
@@ -35,6 +37,8 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
                         (contact, text) -> {
                                 var names = text.split(" ", 2);
                                 contact.setFirstName(names[0]);
+
+                                unitOfWork.markAsModified(contact);
 
                                 if (names.length > 1) {
                                     contact.setLastName(names[1]);
@@ -53,7 +57,10 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     @FXML
     private void saveContactList() {
         try {
-            getModel().save();
+            getPersistenceContext().doInTransaction(ctx -> {
+                unitOfWork.commit();
+            });
+            getModel().setModified(false);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }

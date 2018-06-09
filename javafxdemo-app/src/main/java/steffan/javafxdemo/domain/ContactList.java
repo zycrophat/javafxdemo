@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
-import steffan.javafxdemo.persistence.api.UnitOfWork;
 
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -19,7 +18,6 @@ public class ContactList {
     private BooleanProperty modified = new SimpleBooleanProperty(false);
 
     private PersistenceContext persistenceContext;
-    private UnitOfWork unitOfWork;
 
     public ContactList(PersistenceContext persistenceContext) {
         this.persistenceContext = persistenceContext;
@@ -31,16 +29,10 @@ public class ContactList {
         contacts.setAll(StreamSupport.stream(repository.find().spliterator(), false).collect(Collectors.toList()));
 
         setModified(false);
-        unitOfWork = null;
-    }
-
-    public void save() throws PersistenceException {
-        getUnitOfWork().commit(persistenceContext);
-        modified.set(false);
     }
 
     public ObservableList<Contact> getContacts() {
-        return FXCollections.observableList(contacts);
+        return contacts;
     }
 
     public ReadOnlyBooleanProperty modifiedProperty() {
@@ -53,13 +45,6 @@ public class ContactList {
 
     public void setModified(boolean modified) {
         this.modified.set(modified);
-    }
-
-    public UnitOfWork getUnitOfWork() {
-        if (unitOfWork == null || unitOfWork.isCommitted()) {
-            unitOfWork = persistenceContext.createUnitOfWork();
-        }
-        return unitOfWork;
     }
 
 }

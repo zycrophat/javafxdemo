@@ -7,6 +7,7 @@ module steffan.javafxdemo.app {
     exports steffan.javafxdemo.view.api;
     exports steffan.javafxdemo.domain;
     exports steffan.javafxdemo.persistence.api;
+    exports steffan.javafxdemo.app.main;
 
     uses ViewManager;
 }

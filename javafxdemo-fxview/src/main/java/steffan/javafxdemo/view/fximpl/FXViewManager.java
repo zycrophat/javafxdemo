@@ -1,12 +1,12 @@
 package steffan.javafxdemo.view.fximpl;
 
+import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.app.main.DemoApplication;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.view.api.View;
 import steffan.javafxdemo.view.api.ViewException;
@@ -17,10 +17,13 @@ import java.net.URL;
 
 public class FXViewManager implements ViewManager {
 
+    private DemoApplication demoApplication;
+
     private Stage primaryStage;
 
     @Override
-    public void initialize() throws ViewException {
+    public void initialize(DemoApplication demoApplication) throws ViewException {
+        this.demoApplication = demoApplication;
         JavaFXApplication.initialize(this);
     }
 
@@ -32,7 +35,7 @@ public class FXViewManager implements ViewManager {
             Parent parent = loader.load();
             JavaFXSceneController<ContactList> sceneController = loader.getController();
             //sceneController.setModel(model);
-            sceneController.setFxViewManager(this);
+            sceneController.configure(this, demoApplication.getPersistenceContext());
             Platform.runLater( () -> {
                 primaryStage.setScene(new Scene(parent));
                 primaryStage.setTitle("Contact list");
@@ -50,5 +53,9 @@ public class FXViewManager implements ViewManager {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    public DemoApplication getDemoApplication() {
+        return demoApplication;
     }
 }
