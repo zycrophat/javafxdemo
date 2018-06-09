@@ -3,6 +3,7 @@ package steffan.javafxdemo.persistence.base;
 import steffan.javafxdemo.domain.DomainObject;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
+import steffan.javafxdemo.persistence.api.Repository;
 import steffan.javafxdemo.persistence.api.UnitOfWork;
 
 import java.util.*;
@@ -73,21 +74,23 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
             updateModifiedDomainObjects();
             deleteDeletedDomainObjects();
 
-            setCommitted(true);
+            setCommitted();
         } else {
             throw new IllegalStateException("Cannot commit (already committed)");
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void insertNewDomainObjects() throws PersistenceException {
         for (var classListEntry : classToNewDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = context.getRepository(clazz)
+            var repository =  context.getRepository(clazz)
                     .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
             repository.store(getListOfNewDomainObjectsByClass(clazz));
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void updateModifiedDomainObjects() throws PersistenceException {
         for (var classListEntry : classToModifiedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
@@ -97,12 +100,13 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
         }
     }
 
+
     private void deleteDeletedDomainObjects() throws PersistenceException {
         for (var classListEntry : classToDeletedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository = context.getRepository(clazz)
                     .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
-            repository.delete(getListOfNewDomainObjectsByClass(clazz));
+            repository.delete(getListOfDeletedDomainObjectsByClass(clazz));
         }
     }
 
@@ -111,7 +115,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
         return committed;
     }
 
-    private void setCommitted(boolean committed) {
-        this.committed = committed;
+    private void setCommitted() {
+        this.committed = true;
     }
 }

@@ -39,9 +39,6 @@ public class JavaFXDemoApp implements DemoApplication {
             var contactsView = viewManager.createContactsView();
 
             persistenceContext = new SimplePersistenceContext();
-            var repository = persistenceContext.getRepository(Contact.class).get();
-            repository.store(new Contact(1L, "Andreas", "Steffan"));
-            repository.store(new Contact(2L, "Thomas", "Müller"));
             ContactList contactList = new ContactList(persistenceContext);
             contactList.load();
             contactsView.setModel(contactList);

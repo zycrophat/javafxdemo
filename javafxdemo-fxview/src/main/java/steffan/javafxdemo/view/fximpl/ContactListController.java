@@ -59,6 +59,7 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         try {
             getPersistenceContext().doInTransaction(ctx -> {
                 unitOfWork.commit();
+                unitOfWork = ctx.createUnitOfWork();
             });
             getModel().setModified(false);
         } catch (PersistenceException e) {
