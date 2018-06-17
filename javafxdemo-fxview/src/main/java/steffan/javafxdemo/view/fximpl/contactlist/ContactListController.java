@@ -11,8 +11,8 @@ import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.persistence.api.UnitOfWork;
 import steffan.javafxdemo.view.api.Form;
 import steffan.javafxdemo.view.api.ViewException;
-import steffan.javafxdemo.view.fximpl.JavaFXSceneController;
-import steffan.javafxdemo.view.fximpl.ObserveAndEditListCell;
+import steffan.javafxdemo.view.fximpl.base.JavaFXSceneController;
+import steffan.javafxdemo.view.fximpl.base.ObserveAndEditListCell;
 
 public class ContactListController extends JavaFXSceneController<ContactList> {
 

@@ -1,4 +1,4 @@
-package steffan.javafxdemo.view.fximpl;
+package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.stage.Stage;
 import steffan.javafxdemo.view.api.Form;

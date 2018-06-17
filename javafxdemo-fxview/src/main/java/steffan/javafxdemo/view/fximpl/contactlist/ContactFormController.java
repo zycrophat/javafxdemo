@@ -3,7 +3,7 @@ package steffan.javafxdemo.view.fximpl.contactlist;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import steffan.javafxdemo.domain.Contact;
-import steffan.javafxdemo.view.fximpl.JavaFXFormController;
+import steffan.javafxdemo.view.fximpl.base.JavaFXFormController;
 
 public class ContactFormController extends JavaFXFormController<Contact> {
 
