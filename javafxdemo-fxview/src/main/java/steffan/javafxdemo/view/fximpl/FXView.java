@@ -35,4 +35,8 @@ public class FXView<T> implements View<T> {
         sceneController.setModel(model);
     }
 
+    JavaFXSceneController<T> getSceneController() {
+        return sceneController;
+    }
+
 }

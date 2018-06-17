@@ -11,6 +11,10 @@ public class Contact extends DomainObject {
 
     private StringProperty lastName = new SimpleStringProperty();
 
+    public Contact() {
+        super(-1);
+    }
+
     public Contact(String firstName, String lastName) {
         super(-1);
         this.firstName.setValue(firstName);

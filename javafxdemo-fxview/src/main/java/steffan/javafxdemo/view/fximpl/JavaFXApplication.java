@@ -9,7 +9,7 @@ public class JavaFXApplication extends Application {
 
     public static void initialize(FXViewManager fxViewManager) {
         JavaFXApplication.fxViewManager = fxViewManager;
-        new Thread(() -> Application.launch()).start();
+        new Thread(Application::launch).start();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package steffan.javafxdemo.app.main;
 
-import steffan.javafxdemo.domain.Contact;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;

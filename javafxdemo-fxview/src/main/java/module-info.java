@@ -7,7 +7,9 @@ module steffan.javafxdemo.fxview {
     requires javafx.fxml;
 
     exports steffan.javafxdemo.view.fximpl to javafx.graphics, javafx.fxml;
+    exports steffan.javafxdemo.view.fximpl.contactlist to javafx.graphics, javafx.fxml;
     opens steffan.javafxdemo.view.fximpl to javafx.fxml;
+    opens steffan.javafxdemo.view.fximpl.contactlist to javafx.fxml;
 
     provides ViewManager with FXViewManager;
 }

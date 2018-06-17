@@ -9,12 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class SimpleContactRepository implements Repository<Contact> {
 
-    private Map<Long, Contact> contactMap = new TreeMap<>();
     private File dbFile = new File("contacts");
 
     @Override
@@ -83,7 +81,15 @@ public class SimpleContactRepository implements Repository<Contact> {
     public void store(List<Contact> objects) throws PersistenceException {
         try {
             var contacts = loadContacts();
-            objects.forEach(contact -> contacts.put(contact.getId(), contact));
+
+            final long[] idForNewContact = {contacts.size() + 1L};
+            objects.forEach(contact -> {
+                if (isNewContact(contact)) {
+                    contact.setId(idForNewContact[0]);
+                    idForNewContact[0]++;
+                }
+                contacts.put(contact.getId(), contact);
+            });
             dbFile.createNewFile();
             try(BufferedWriter writer = createBufferedWriter()) {
 
@@ -97,13 +103,17 @@ public class SimpleContactRepository implements Repository<Contact> {
         }
     }
 
+    private boolean isNewContact(Contact contact) {
+        return contact.getId() == -1L;
+    }
+
     private BufferedWriter createBufferedWriter() throws FileNotFoundException {
         return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dbFile), StandardCharsets.UTF_8));
     }
 
     @Override
     public void delete(Contact object) throws PersistenceException {
-        contactMap.remove(object.getId());
+        delete(List.of(object));
     }
 
     @Override
