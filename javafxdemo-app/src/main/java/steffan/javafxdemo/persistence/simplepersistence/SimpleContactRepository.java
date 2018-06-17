@@ -82,11 +82,10 @@ public class SimpleContactRepository implements Repository<Contact> {
         try {
             var contacts = loadContacts();
 
-            final long[] idForNewContact = {contacts.size() + 1L};
             objects.forEach(contact -> {
                 if (isNewContact(contact)) {
-                    contact.setId(idForNewContact[0]);
-                    idForNewContact[0]++;
+                    var id = generateId(contacts);
+                    contact.setId(id);
                 }
                 contacts.put(contact.getId(), contact);
             });
@@ -101,6 +100,10 @@ public class SimpleContactRepository implements Repository<Contact> {
         } catch (IOException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    private long generateId(Map<Long, Contact> contactMap) {
+        return contactMap.size() + 1L;
     }
 
     private boolean isNewContact(Contact contact) {
