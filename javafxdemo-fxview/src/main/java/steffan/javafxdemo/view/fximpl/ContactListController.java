@@ -1,6 +1,8 @@
 package steffan.javafxdemo.view.fximpl;
 
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import steffan.javafxdemo.domain.Contact;
@@ -17,6 +19,18 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     private Button saveButton;
     private UnitOfWork unitOfWork;
 
+    private static ObservableValue<String> contactToObservableStringValue(Contact contact) {
+        return contact.idProperty().asString().
+                concat(": ").
+                concat(contact.firstNameProperty()).
+                concat(" ").
+                concat(contact.lastNameProperty());
+    }
+
+    private static String contactToEditText(Contact contact) {
+        return contact.getFirstName() + ((contact.getLastName().isEmpty()) ? "" : " " + contact.getLastName());
+    }
+
     @Override
     protected void initialize(ContactList model) {
         saveButton.disableProperty().bind(model.modifiedProperty().not());
@@ -24,34 +38,28 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         unitOfWork = getPersistenceContext().createUnitOfWork();
         contactsListView.setCellFactory(
                 listView -> new ObserveAndEditListCell<>(
-                        contact ->
-                                contact.idProperty().asString().
-                                concat(": ").
-                                concat(contact.firstNameProperty()).
-                                concat(" ").
-                                concat(contact.lastNameProperty()),
-
-                        contact ->
-                                contact.getFirstName() + ((contact.getLastName().isEmpty()) ? "" : " " + contact.getLastName()),
-
-                        (contact, text) -> {
-                                var names = text.split(" ", 2);
-                                contact.setFirstName(names[0]);
-
-                                unitOfWork.markAsModified(contact);
-
-                                if (names.length > 1) {
-                                    contact.setLastName(names[1]);
-                                } else {
-                                    contact.setLastName("");
-                                }
-                                model.setModified(true);
-                                return contact;
-                        }
+                        ContactListController::contactToObservableStringValue,
+                        ContactListController::contactToEditText,
+                        this::updateContact
                 )
         );
         contactsListView.setEditable(true);
         contactsListView.setItems(model.getContacts());
+    }
+
+    private Contact updateContact(Contact contact, String text) {
+        var names = text.split(" ", 2);
+        contact.setFirstName(names[0]);
+
+        unitOfWork.markAsModified(contact);
+
+        if (names.length > 1) {
+            contact.setLastName(names[1]);
+        } else {
+            contact.setLastName("");
+        }
+        getModel().setModified(true);
+        return contact;
     }
 
     @FXML
@@ -59,11 +67,14 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         try {
             getPersistenceContext().doInTransaction(ctx -> {
                 unitOfWork.commit();
+                getModel().setModified(false);
                 unitOfWork = ctx.createUnitOfWork();
             });
-            getModel().setModified(false);
         } catch (PersistenceException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Fehler beim Speichern");
+            alert.setContentText("Es ist ein Fehler beim Speichern aufgetreten");
         }
     }
 
@@ -73,6 +84,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
             getModel().load();
         } catch (PersistenceException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Fehler beim Laden");
+            alert.setContentText("Es ist ein Fehler beim Laden aufgetreten");
         }
     }
 }

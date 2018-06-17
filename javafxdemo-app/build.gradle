@@ -2,8 +2,8 @@ plugins {
     id 'application'
 }
 
-//project.sourceCompatibility = 1.10
-//project.targetCompatibility = 1.10
+project.sourceCompatibility = 1.10
+project.targetCompatibility = 1.10
 
 mainClassName = 'steffan.javafxdemo.app.main.Main'
 

@@ -23,6 +23,7 @@ public abstract class PersistenceContextImplBase implements PersistenceContext {
         this.classRepositoryMap.put(domainType, repository);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends DomainObject> Optional<Repository<T>> getRepository(Class<T> clazz) {
         return Optional.ofNullable((Repository<T>) classRepositoryMap.get(clazz));
