@@ -1,0 +1,10 @@
+dependencies {
+    compile 'com.google.guava:guava:23.0'
+    compile project(':javafxdemo-app')
+
+    testCompile 'junit:junit:4.12'
+}
+
+javaModule.name = 'steffan.javafxdemo.csvpersistence'
+
+javaModule.extraTestModules = ['hamcrest.core']

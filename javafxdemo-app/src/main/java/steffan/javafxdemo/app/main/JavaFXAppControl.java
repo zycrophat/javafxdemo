@@ -1,26 +1,24 @@
 package steffan.javafxdemo.app.main;
 
+import steffan.javafxdemo.ApplicationControl;
 import steffan.javafxdemo.domain.Contact;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
-import steffan.javafxdemo.persistence.simplepersistence.SimplePersistenceContext;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
-
-import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
 
-public class JavaFXDemoApp implements DemoApplication {
+public class JavaFXAppControl implements ApplicationControl {
 
     private ViewManager viewManager;
     private PersistenceContext persistenceContext;
 
     private boolean isInitialized = false;
 
-    JavaFXDemoApp(ViewManager viewManager, PersistenceContext persistenceContext) {
+    JavaFXAppControl(ViewManager viewManager, PersistenceContext persistenceContext) {
         this.viewManager = requireNonNull(viewManager, "viewManager is null");
         this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
     }
@@ -39,8 +37,6 @@ public class JavaFXDemoApp implements DemoApplication {
         try {
             viewManager.initialize(this);
             var contactsView = viewManager.createContactsView();
-
-            persistenceContext = new SimplePersistenceContext();
 
             var contacts = persistenceContext.getRepository(Contact.class).find();
             ContactList contactList = new ContactList(contacts);

@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import steffan.javafxdemo.app.main.DemoApplication;
+import steffan.javafxdemo.ApplicationControl;
 import steffan.javafxdemo.domain.ContactDTO;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.view.api.Form;
@@ -19,13 +19,13 @@ import java.net.URL;
 
 public class FXViewManager implements ViewManager {
 
-    private DemoApplication demoApplication;
+    private ApplicationControl applicationControl;
 
     private Stage primaryStage;
 
     @Override
-    public void initialize(DemoApplication demoApplication) throws ViewException {
-        this.demoApplication = demoApplication;
+    public void initialize(ApplicationControl applicationControl) throws ViewException {
+        this.applicationControl = applicationControl;
         JavaFXApplication.initialize(this);
     }
 
@@ -36,7 +36,7 @@ public class FXViewManager implements ViewManager {
         try {
             Parent parent = loader.load();
             JavaFXSceneController<ContactList> sceneController = loader.getController();
-            sceneController.configure(this, demoApplication.getPersistenceContext());
+            sceneController.configure(this, applicationControl.getPersistenceContext());
             Platform.runLater( () -> {
                 primaryStage.setScene(new Scene(parent));
                 primaryStage.setTitle("Contact list");
@@ -55,7 +55,7 @@ public class FXViewManager implements ViewManager {
         try {
             Parent parent = loader.load();
             JavaFXFormController<ContactDTO> formController = loader.getController();
-            formController.configure(this, demoApplication.getPersistenceContext());
+            formController.configure(this, applicationControl.getPersistenceContext());
             formController.setModel(contactDTO);
             Stage stage = new Stage();
             Platform.runLater( () -> {
@@ -80,7 +80,7 @@ public class FXViewManager implements ViewManager {
         this.primaryStage = primaryStage;
     }
 
-    public DemoApplication getDemoApplication() {
-        return demoApplication;
+    public ApplicationControl getApplicationControl() {
+        return applicationControl;
     }
 }

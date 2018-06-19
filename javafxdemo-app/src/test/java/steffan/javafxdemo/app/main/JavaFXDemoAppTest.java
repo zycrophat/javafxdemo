@@ -2,6 +2,7 @@ package steffan.javafxdemo.app.main;
 
 
 import org.junit.Test;
+import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.view.api.ViewManager;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -13,11 +14,11 @@ public class JavaFXDemoAppTest {
     @Test
     public void testAppIsInitialized() {
         ViewManager viewManager = mock(ViewManager.class);
+        PersistenceContext ctx = mock(PersistenceContext.class);
 
-        JavaFXDemoApp app = new JavaFXDemoApp(() -> viewManager);
+        JavaFXAppControl app = new JavaFXAppControl(viewManager, ctx);
 
         assertThat(app.isInitialized(), is(false));
-        assertThat(app.getViewManager(), is(nullValue()));
 
         app.initialize();
 

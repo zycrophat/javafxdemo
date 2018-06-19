@@ -1,3 +1,4 @@
+import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.view.api.ViewManager;
 
 module steffan.javafxdemo.app {
@@ -7,7 +8,8 @@ module steffan.javafxdemo.app {
     exports steffan.javafxdemo.view.api;
     exports steffan.javafxdemo.domain;
     exports steffan.javafxdemo.persistence.api;
-    exports steffan.javafxdemo.app.main;
+    exports steffan.javafxdemo;
 
     uses ViewManager;
+    uses PersistenceContext;
 }

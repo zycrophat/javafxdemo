@@ -1,9 +1,9 @@
-package steffan.javafxdemo.app.main;
+package steffan.javafxdemo;
 
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.view.api.ViewManager;
 
-public interface DemoApplication {
+public interface ApplicationControl {
     void initialize();
 
     void start();
