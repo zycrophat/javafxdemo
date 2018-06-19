@@ -91,7 +91,7 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     private void loadContactList() {
         try {
             getPersistenceContext().doInTransaction(ctx -> {
-                var contacts = ctx.getRepository(Contact.class).get().find();
+                var contacts = ctx.getRepository(Contact.class).find();
 
                 getModel().getContacts().setAll(contacts);
                 getModel().setModified(false);

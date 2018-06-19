@@ -20,7 +20,7 @@ public class JavaFXDemoApp implements DemoApplication {
 
     private boolean isInitialized = false;
 
-    public JavaFXDemoApp(ViewManager viewManager, PersistenceContext persistenceContext) {
+    JavaFXDemoApp(ViewManager viewManager, PersistenceContext persistenceContext) {
         this.viewManager = requireNonNull(viewManager, "viewManager is null");
         this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
     }
@@ -42,7 +42,7 @@ public class JavaFXDemoApp implements DemoApplication {
 
             persistenceContext = new SimplePersistenceContext();
 
-            var contacts = persistenceContext.getRepository(Contact.class).get().find();
+            var contacts = persistenceContext.getRepository(Contact.class).find();
             ContactList contactList = new ContactList(contacts);
 
             contactsView.setModel(contactList);

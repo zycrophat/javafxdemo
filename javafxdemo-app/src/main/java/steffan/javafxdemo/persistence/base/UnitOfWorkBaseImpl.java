@@ -86,8 +86,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     private void insertNewDomainObjects() throws PersistenceException {
         for (var classListEntry : classToNewDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository =  context.getRepository(clazz)
-                    .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
+            var repository =  context.getRepository(clazz);
             repository.store(getListOfNewDomainObjectsByClass(clazz));
         }
     }
@@ -96,8 +95,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     private void updateModifiedDomainObjects() throws PersistenceException {
         for (var classListEntry : classToModifiedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = context.getRepository(clazz)
-                    .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
+            var repository = context.getRepository(clazz);
             repository.store(getListOfModifiedDomainObjectsByClass(clazz));
         }
     }
@@ -106,8 +104,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     private void deleteDeletedDomainObjects() throws PersistenceException {
         for (var classListEntry : classToDeletedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = context.getRepository(clazz)
-                    .orElseThrow(() -> new PersistenceException("Cannot find repository for type " + clazz.getName()));
+            var repository = context.getRepository(clazz);
             repository.delete(getListOfDeletedDomainObjectsByClass(clazz));
         }
     }
