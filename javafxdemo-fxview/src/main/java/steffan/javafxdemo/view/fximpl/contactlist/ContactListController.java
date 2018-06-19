@@ -90,7 +90,12 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     @FXML
     private void loadContactList() {
         try {
-            getModel().load();
+            getPersistenceContext().doInTransaction(ctx -> {
+                var contacts = ctx.getRepository(Contact.class).get().find();
+
+                getModel().getContacts().setAll(contacts);
+                getModel().setModified(false);
+            });
         } catch (PersistenceException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);

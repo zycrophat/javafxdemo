@@ -5,11 +5,8 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import steffan.javafxdemo.persistence.api.PersistenceContext;
-import steffan.javafxdemo.persistence.api.PersistenceException;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.List;
 
 public class ContactList {
 
@@ -17,16 +14,8 @@ public class ContactList {
 
     private BooleanProperty modified = new SimpleBooleanProperty(false);
 
-    private PersistenceContext persistenceContext;
-
-    public ContactList(PersistenceContext persistenceContext) {
-        this.persistenceContext = persistenceContext;
-    }
-
-    public void load() throws PersistenceException {
-        var repository = persistenceContext.getRepository(Contact.class).get();
-
-        contacts.setAll(StreamSupport.stream(repository.find().spliterator(), false).collect(Collectors.toList()));
+    public ContactList(List<Contact> contactList) {
+        contacts.setAll(contactList);
 
         setModified(false);
     }

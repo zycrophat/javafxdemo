@@ -1,11 +1,14 @@
 package steffan.javafxdemo.app.main;
 
+import steffan.javafxdemo.domain.Contact;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.persistence.simplepersistence.SimplePersistenceContext;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
+
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -38,8 +41,10 @@ public class JavaFXDemoApp implements DemoApplication {
             var contactsView = viewManager.createContactsView();
 
             persistenceContext = new SimplePersistenceContext();
-            ContactList contactList = new ContactList(persistenceContext);
-            contactList.load();
+
+            var contacts = persistenceContext.getRepository(Contact.class).get().find();
+            ContactList contactList = new ContactList(contacts);
+
             contactsView.setModel(contactList);
             contactsView.show();
         } catch (ViewException | PersistenceException e) {
