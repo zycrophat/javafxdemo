@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import steffan.javafxdemo.app.main.DemoApplication;
-import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.domain.ContactDTO;
 import steffan.javafxdemo.domain.ContactList;
 import steffan.javafxdemo.view.api.Form;
 import steffan.javafxdemo.view.api.View;
@@ -49,17 +49,17 @@ public class FXViewManager implements ViewManager {
     }
 
     @Override
-    public Form<Contact> createCreateContactForm(Contact contact) throws ViewException {
+    public Form<ContactDTO> createContactForm(ContactDTO contactDTO, String formTitle) throws ViewException {
         URL resource = FXViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/CreateContact.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         try {
             Parent parent = loader.load();
-            JavaFXFormController<Contact> formController = loader.getController();
+            JavaFXFormController<ContactDTO> formController = loader.getController();
             formController.configure(this, demoApplication.getPersistenceContext());
-            formController.setModel(contact);
+            formController.setModel(contactDTO);
             Stage stage = new Stage();
             Platform.runLater( () -> {
-                stage.setTitle("Create Contact");
+                stage.setTitle(formTitle);
                 stage.setScene(new Scene(parent));
 
                 stage.initOwner(primaryStage);

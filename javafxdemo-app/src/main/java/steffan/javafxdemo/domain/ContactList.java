@@ -35,6 +35,10 @@ public class ContactList {
         return contacts;
     }
 
+    public void addContact(Contact contact) {
+        this.contacts.add(contact);
+    }
+
     public ReadOnlyBooleanProperty modifiedProperty() {
         return modified;
     }

@@ -4,10 +4,11 @@ import steffan.javafxdemo.domain.Contact;
 import steffan.javafxdemo.domain.DomainObject;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Repository<T extends DomainObject> {
 
-    T find(long key) throws PersistenceException;
+    Optional<T> find(long key) throws PersistenceException;
 
     List<T> find() throws PersistenceException;
 

@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SimpleContactRepository implements Repository<Contact> {
@@ -16,7 +17,7 @@ public class SimpleContactRepository implements Repository<Contact> {
     private File dbFile = new File("contacts");
 
     @Override
-    public Contact find(long key) throws PersistenceException {
+    public Optional<Contact> find(long key) throws PersistenceException {
         try {
             dbFile.createNewFile();
             try(LineNumberReader reader = new LineNumberReader(new InputStreamReader(new FileInputStream(dbFile)))) {
@@ -24,7 +25,7 @@ public class SimpleContactRepository implements Repository<Contact> {
                         .lines()
                         .map(this::mapLineToContact)
                         .filter(c -> c.getId() == key)
-                        .findFirst().orElse(null);
+                        .findFirst();
             }
         } catch (IOException e) {
             throw new PersistenceException(e);

@@ -2,10 +2,10 @@ package steffan.javafxdemo.view.fximpl.contactlist;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.domain.ContactDTO;
 import steffan.javafxdemo.view.fximpl.base.JavaFXFormController;
 
-public class ContactFormController extends JavaFXFormController<Contact> {
+public class ContactFormController extends JavaFXFormController<ContactDTO> {
 
     @FXML
     private TextField firstNameTextField;
@@ -14,25 +14,22 @@ public class ContactFormController extends JavaFXFormController<Contact> {
     private TextField lastNameTextField;
 
     @Override
-    protected void initialize(Contact model) {
-        firstNameTextField.textProperty().bindBidirectional(model.firstNameProperty());
-        lastNameTextField.textProperty().bindBidirectional(model.lastNameProperty());
+    protected void initialize(ContactDTO model) {
+        firstNameTextField.setText(model.getFirstName());
+        lastNameTextField.setText(model.getLastName());
     }
 
     @FXML
     private void submit() {
-        unbindTextFields();
-        getOnSubmit().accept(getModel());
-    }
+        var contactDTO = getModel();
+        contactDTO.setFirstName(firstNameTextField.getText());
+        contactDTO.setLastName(lastNameTextField.getText());
 
-    private void unbindTextFields() {
-        firstNameTextField.textProperty().unbind();
-        firstNameTextField.textProperty().unbind();
+        getOnSubmit().accept(contactDTO);
     }
 
     @FXML
     private void cancel() {
-        unbindTextFields();
         getOnCancel().accept(getModel());
     }
 }
