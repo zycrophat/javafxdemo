@@ -1,11 +1,13 @@
 package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import steffan.javafxdemo.ApplicationControl;
 import steffan.javafxdemo.domain.ContactDTO;
 import steffan.javafxdemo.domain.ContactList;
@@ -60,10 +62,18 @@ public class FXViewManager implements ViewManager {
             Stage stage = new Stage();
             Platform.runLater( () -> {
                 stage.setTitle(formTitle);
-                stage.setScene(new Scene(parent));
+                var scene = new Scene(parent);
+                stage.setScene(scene);
 
                 stage.initOwner(primaryStage);
                 stage.initModality(Modality.WINDOW_MODAL);
+                stage.setOnShown(event -> {
+                    double height = stage.getHeight();
+                    double width = stage.getWidth();
+                    stage.setMinHeight(height);
+                    stage.setMaxHeight(height);
+                    stage.setMinWidth(width);
+                });
             });
 
             return new FXForm<>(stage, formController);
