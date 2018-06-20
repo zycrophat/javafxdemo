@@ -25,6 +25,12 @@ public class JavaFXAppControl implements ApplicationControl {
 
     @Override
     public void initialize() {
+        try {
+            viewManager.initialize(this);
+        } catch (ViewException e) {
+            e.printStackTrace();
+            System.exit(666);
+        }
         setInitialized(true);
     }
 
@@ -35,7 +41,6 @@ public class JavaFXAppControl implements ApplicationControl {
         }
 
         try {
-            viewManager.initialize(this);
             var contactsView = viewManager.createContactsView();
 
             var contacts = persistenceContext.getRepository(Contact.class).find();
