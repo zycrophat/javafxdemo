@@ -5,7 +5,8 @@ import org.junit.Test;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.view.api.ViewManager;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 

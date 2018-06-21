@@ -1,8 +1,8 @@
 package steffan.javafxdemo.app.main;
 
 import steffan.javafxdemo.ApplicationControl;
-import steffan.javafxdemo.domain.Contact;
-import steffan.javafxdemo.domain.ContactList;
+import steffan.javafxdemo.models.domainmodel.Contact;
+import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.view.api.ViewException;

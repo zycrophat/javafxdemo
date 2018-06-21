@@ -1,7 +1,7 @@
 package steffan.javafxdemo.persistence.api;
 
-import steffan.javafxdemo.domain.Contact;
-import steffan.javafxdemo.domain.DomainObject;
+import steffan.javafxdemo.models.domainmodel.Contact;
+import steffan.javafxdemo.models.domainmodel.DomainObject;
 
 import java.util.List;
 import java.util.Optional;

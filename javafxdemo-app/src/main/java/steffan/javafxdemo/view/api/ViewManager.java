@@ -1,8 +1,8 @@
 package steffan.javafxdemo.view.api;
 
 import steffan.javafxdemo.ApplicationControl;
-import steffan.javafxdemo.domain.ContactDTO;
-import steffan.javafxdemo.domain.ContactList;
+import steffan.javafxdemo.models.domainmodel.ContactDTO;
+import steffan.javafxdemo.models.viewmodel.ContactList;
 
 public interface ViewManager {
 

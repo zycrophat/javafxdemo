@@ -1,15 +1,11 @@
 package steffan.javafxdemo.persistence.base;
 
-import steffan.javafxdemo.domain.DomainObject;
-import steffan.javafxdemo.persistence.api.PersistenceContext;
-import steffan.javafxdemo.persistence.api.PersistenceException;
-import steffan.javafxdemo.persistence.api.Repository;
-import steffan.javafxdemo.persistence.api.UnitOfWork;
+import steffan.javafxdemo.models.domainmodel.DomainObject;
+import steffan.javafxdemo.persistence.api.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Consumer;
 
 public abstract class PersistenceContextImplBase implements PersistenceContext {
 
@@ -37,16 +33,24 @@ public abstract class PersistenceContextImplBase implements PersistenceContext {
 
     @Override
     public UnitOfWork createUnitOfWork() {
-        return new UnitOfWorkBaseImpl(this);
+        return new UnitOfWorkBaseImpl();
     }
 
     @Override
-    public UnitOfWork getCurrentUnitOfWork() {
+    public UnitOfWork getOrCreateCurrentUnitOfWork() {
+        if (currentUnitOfWork == null || currentUnitOfWork.isCommitted()) {
+            currentUnitOfWork = createUnitOfWork();
+        }
         return currentUnitOfWork;
     }
 
     @Override
-    public void setCurrentUnitOfWork(UnitOfWork unitOfWork) {
-        this.currentUnitOfWork = unitOfWork;
+    public void withUnitOfWork(Consumer<UnitOfWork> unitOfWorkConsumer) {
+        unitOfWorkConsumer.accept(getOrCreateCurrentUnitOfWork());
+    }
+
+    @Override
+    public void withUnitOfWorkInTransaction(UnitOfWorkTxRunnable unitOfWorkTxRunnable) throws PersistenceException {
+        doInTransaction(ctx -> unitOfWorkTxRunnable.run(ctx, getOrCreateCurrentUnitOfWork()));
     }
 }

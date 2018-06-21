@@ -5,11 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import steffan.javafxdemo.domain.Contact;
-import steffan.javafxdemo.domain.ContactDTO;
-import steffan.javafxdemo.domain.ContactList;
+import steffan.javafxdemo.models.domainmodel.Contact;
+import steffan.javafxdemo.models.domainmodel.ContactDTO;
+import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceException;
-import steffan.javafxdemo.persistence.api.UnitOfWork;
 import steffan.javafxdemo.view.api.Form;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.fximpl.base.JavaFXSceneController;
@@ -25,7 +24,6 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private Button editButton;
-    private UnitOfWork unitOfWork;
 
     private static ObservableValue<String> contactToObservableStringValue(Contact contact) {
         return contact.idProperty().asString().
@@ -44,7 +42,6 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         saveButton.disableProperty().bind(model.modifiedProperty().not());
         editButton.disableProperty().bind(contactsListView.getSelectionModel().selectedItemProperty().isNull());
 
-        unitOfWork = getPersistenceContext().createUnitOfWork();
         contactsListView.setCellFactory(
                 listView -> new ObserveAndEditListCell<>(
                         ContactListController::contactToObservableStringValue,
@@ -60,7 +57,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         var names = text.split(" ", 2);
         contact.setFirstName(names[0]);
 
-        unitOfWork.markAsModified(contact);
+        getApplicationControl().getPersistenceContext().withUnitOfWork(unitOfWork -> {
+            unitOfWork.markAsModified(contact);
+        });
 
         if (names.length > 1) {
             contact.setLastName(names[1]);
@@ -74,10 +73,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     @FXML
     private void saveContactList() {
         try {
-            getPersistenceContext().doInTransaction(ctx -> {
-                unitOfWork.commit();
+            getApplicationControl().getPersistenceContext().withUnitOfWorkInTransaction( (ctx, unitOfWork) -> {
+                unitOfWork.commit(ctx);
                 getModel().setModified(false);
-                unitOfWork = ctx.createUnitOfWork();
             });
         } catch (PersistenceException e) {
             e.printStackTrace();
@@ -90,7 +88,7 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     @FXML
     private void loadContactList() {
         try {
-            getPersistenceContext().doInTransaction(ctx -> {
+            getApplicationControl().getPersistenceContext().doInTransaction(ctx -> {
                 var contacts = ctx.getRepository(Contact.class).find();
 
                 getModel().getContacts().setAll(contacts);
@@ -115,7 +113,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
                 Contact contact = new Contact(c.getId(), c.getFirstName(), c.getLastName());
                 contactList.addContact(contact);
                 contactList.setModified(true);
-                unitOfWork.markAsNew(contact);
+                getApplicationControl().getPersistenceContext().withUnitOfWork( unitOfWork -> {
+                    unitOfWork.markAsNew(contact);
+                });
 
                 createContactForm.hide();
             });
@@ -142,7 +142,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
                 selectedContact.setLastName(c.getLastName());
 
                 getModel().setModified(true);
-                unitOfWork.markAsModified(selectedContact);
+                getApplicationControl().getPersistenceContext().withUnitOfWork(unitOfWork -> {
+                    unitOfWork.markAsModified(selectedContact);
+                });
 
                 createContactForm.hide();
             });

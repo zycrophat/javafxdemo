@@ -6,9 +6,10 @@ module steffan.javafxdemo.app {
     requires transitive javafx.base;
 
     exports steffan.javafxdemo.view.api;
-    exports steffan.javafxdemo.domain;
+    exports steffan.javafxdemo.models.domainmodel;
     exports steffan.javafxdemo.persistence.api;
     exports steffan.javafxdemo;
+    exports steffan.javafxdemo.models.viewmodel;
 
     uses ViewManager;
     uses PersistenceContext;

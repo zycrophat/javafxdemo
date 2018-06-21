@@ -1,16 +1,14 @@
 package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import steffan.javafxdemo.ApplicationControl;
-import steffan.javafxdemo.domain.ContactDTO;
-import steffan.javafxdemo.domain.ContactList;
+import steffan.javafxdemo.models.domainmodel.ContactDTO;
+import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.view.api.Form;
 import steffan.javafxdemo.view.api.View;
 import steffan.javafxdemo.view.api.ViewException;
@@ -38,7 +36,7 @@ public class FXViewManager implements ViewManager {
         try {
             Parent parent = loader.load();
             JavaFXSceneController<ContactList> sceneController = loader.getController();
-            sceneController.configure(this, applicationControl.getPersistenceContext());
+            sceneController.configure(this, applicationControl);
             Platform.runLater( () -> {
                 primaryStage.setScene(new Scene(parent));
                 primaryStage.setTitle("Contact list");
@@ -57,7 +55,7 @@ public class FXViewManager implements ViewManager {
         try {
             Parent parent = loader.load();
             JavaFXFormController<ContactDTO> formController = loader.getController();
-            formController.configure(this, applicationControl.getPersistenceContext());
+            formController.configure(this, applicationControl);
             formController.setModel(contactDTO);
             Stage stage = new Stage();
             Platform.runLater( () -> {

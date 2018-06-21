@@ -1,6 +1,6 @@
 package steffan.javafxdemo.persistence.base;
 
-import steffan.javafxdemo.domain.DomainObject;
+import steffan.javafxdemo.models.domainmodel.DomainObject;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.persistence.api.UnitOfWork;
@@ -12,16 +12,13 @@ import java.util.Map;
 
 public class UnitOfWorkBaseImpl implements UnitOfWork {
 
-    private PersistenceContext context;
-
     private Map<Class<? extends DomainObject>, List<? extends DomainObject>> classToNewDomainObjectList;
     private Map<Class<? extends DomainObject>, List<? extends DomainObject>> classToModifiedDomainObjectList;
     private Map<Class<? extends DomainObject>, List<? extends DomainObject>> classToDeletedDomainObjectList;
 
     private boolean committed = false;
 
-    public UnitOfWorkBaseImpl(PersistenceContext context) {
-        this.context = context;
+    public UnitOfWorkBaseImpl() {
         this.classToNewDomainObjectList = new HashMap<>();
         this.classToModifiedDomainObjectList = new HashMap<>();
         this.classToDeletedDomainObjectList = new HashMap<>();
@@ -70,11 +67,11 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     }
 
     @Override
-    public void commit() throws PersistenceException {
+    public void commit(PersistenceContext context) throws PersistenceException {
         if (!this.isCommitted()) {
-            insertNewDomainObjects();
-            updateModifiedDomainObjects();
-            deleteDeletedDomainObjects();
+            insertNewDomainObjects(context);
+            updateModifiedDomainObjects(context);
+            deleteDeletedDomainObjects(context);
 
             setCommitted();
         } else {
@@ -83,7 +80,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     }
 
     @SuppressWarnings("unchecked")
-    private void insertNewDomainObjects() throws PersistenceException {
+    private void insertNewDomainObjects(PersistenceContext context) throws PersistenceException {
         for (var classListEntry : classToNewDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository =  context.getRepository(clazz);
@@ -92,7 +89,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     }
 
     @SuppressWarnings("unchecked")
-    private void updateModifiedDomainObjects() throws PersistenceException {
+    private void updateModifiedDomainObjects(PersistenceContext context) throws PersistenceException {
         for (var classListEntry : classToModifiedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository = context.getRepository(clazz);
@@ -101,7 +98,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     }
 
 
-    private void deleteDeletedDomainObjects() throws PersistenceException {
+    private void deleteDeletedDomainObjects(PersistenceContext context) throws PersistenceException {
         for (var classListEntry : classToDeletedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository = context.getRepository(clazz);

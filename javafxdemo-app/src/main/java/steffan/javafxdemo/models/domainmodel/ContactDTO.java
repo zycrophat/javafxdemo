@@ -1,4 +1,4 @@
-package steffan.javafxdemo.domain;
+package steffan.javafxdemo.models.domainmodel;
 
 public class ContactDTO {
 

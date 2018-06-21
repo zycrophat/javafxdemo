@@ -1,6 +1,6 @@
 package steffan.javafxdemo.persistence.simplepersistence;
 
-import steffan.javafxdemo.domain.Contact;
+import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.persistence.api.TransactionScript;
 import steffan.javafxdemo.persistence.base.PersistenceContextImplBase;

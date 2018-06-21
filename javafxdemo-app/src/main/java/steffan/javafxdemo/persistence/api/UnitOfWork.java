@@ -1,6 +1,6 @@
 package steffan.javafxdemo.persistence.api;
 
-import steffan.javafxdemo.domain.DomainObject;
+import steffan.javafxdemo.models.domainmodel.DomainObject;
 
 public interface UnitOfWork {
 
@@ -10,7 +10,7 @@ public interface UnitOfWork {
 
     <T extends DomainObject> void markAsDeleted(T domainObject);
 
-    void commit() throws PersistenceException;
+    void commit(PersistenceContext context) throws PersistenceException;
 
     boolean isCommitted();
 }

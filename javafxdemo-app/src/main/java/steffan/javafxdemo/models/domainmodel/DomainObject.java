@@ -1,4 +1,4 @@
-package steffan.javafxdemo.domain;
+package steffan.javafxdemo.models.domainmodel;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;

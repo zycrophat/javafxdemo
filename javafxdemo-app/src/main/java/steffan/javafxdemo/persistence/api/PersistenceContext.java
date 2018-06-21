@@ -1,8 +1,8 @@
 package steffan.javafxdemo.persistence.api;
 
-import steffan.javafxdemo.domain.DomainObject;
+import steffan.javafxdemo.models.domainmodel.DomainObject;
 
-import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface PersistenceContext {
 
@@ -10,9 +10,11 @@ public interface PersistenceContext {
 
     void doInTransaction(TransactionScript transactionScript) throws PersistenceException;
 
-    UnitOfWork getCurrentUnitOfWork();
-
-    void setCurrentUnitOfWork(UnitOfWork unitOfWork);
+    UnitOfWork getOrCreateCurrentUnitOfWork();
 
     UnitOfWork createUnitOfWork();
+
+    void withUnitOfWork(Consumer<UnitOfWork> unitOfWorkConsumer);
+
+    void withUnitOfWorkInTransaction(UnitOfWorkTxRunnable unitOfWorkTxRunnable) throws PersistenceException;
 }

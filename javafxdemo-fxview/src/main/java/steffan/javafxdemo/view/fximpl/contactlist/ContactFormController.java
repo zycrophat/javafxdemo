@@ -2,7 +2,7 @@ package steffan.javafxdemo.view.fximpl.contactlist;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import steffan.javafxdemo.domain.ContactDTO;
+import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.view.fximpl.base.JavaFXFormController;
 
 public class ContactFormController extends JavaFXFormController<ContactDTO> {

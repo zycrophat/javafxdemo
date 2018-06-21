@@ -1,10 +1,10 @@
 package steffan.javafxdemo.view.fximpl.base;
 
-import steffan.javafxdemo.persistence.api.PersistenceContext;
+import steffan.javafxdemo.ApplicationControl;
 
 public abstract class JavaFXSceneController<T> {
 
-    private PersistenceContext persistenceContext;
+    private ApplicationControl applicationControl;
     private T model;
 
     private FXViewManager fxViewManager;
@@ -27,17 +27,17 @@ public abstract class JavaFXSceneController<T> {
         this.fxViewManager = fxViewManager;
     }
 
-    public PersistenceContext getPersistenceContext() {
-        return persistenceContext;
+    public ApplicationControl getApplicationControl() {
+        return applicationControl;
     }
 
-    public void setPersistenceContext(PersistenceContext persistenceContext) {
-        this.persistenceContext = persistenceContext;
+    public void setApplicationControl(ApplicationControl applicationControl) {
+        this.applicationControl = applicationControl;
     }
 
-    public void configure(FXViewManager fxViewManager, PersistenceContext persistenceContext) {
+    public void configure(FXViewManager fxViewManager, ApplicationControl applicationControl) {
         setFxViewManager(fxViewManager);
-        setPersistenceContext(persistenceContext);
+        setApplicationControl(applicationControl);
     }
 
     protected abstract void initialize(T model);
