@@ -1,5 +1,7 @@
 package steffan.javafxdemo.commands;
 
+import java.util.Optional;
+
 public interface Command<T> {
-    T run();
+    Optional<T> run() throws CommandException;
 }

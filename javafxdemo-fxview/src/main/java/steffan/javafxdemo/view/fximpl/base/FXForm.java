@@ -1,5 +1,6 @@
 package steffan.javafxdemo.view.fximpl.base;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import steffan.javafxdemo.view.api.Form;
 
@@ -22,5 +23,10 @@ public class FXForm<T> extends FXView<T> implements Form<T> {
     @Override
     public void setOnCancel(Consumer<T> onCancel) {
         formController.setOnCancel(onCancel);
+    }
+
+    @Override
+    public void showAndWait() {
+        Platform.runLater(getStage()::showAndWait);
     }
 }

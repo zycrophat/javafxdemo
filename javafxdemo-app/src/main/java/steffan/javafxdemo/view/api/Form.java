@@ -7,4 +7,6 @@ public interface Form<T> extends View<T>{
     void setOnSubmit(Consumer<T> onSubmit);
 
     void setOnCancel(Consumer<T> onCancel);
+
+    void showAndWait();
 }

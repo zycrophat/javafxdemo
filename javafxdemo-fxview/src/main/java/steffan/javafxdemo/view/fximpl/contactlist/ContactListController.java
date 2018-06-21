@@ -6,6 +6,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import steffan.javafxdemo.commands.ChangeContactNameCommand;
+import steffan.javafxdemo.commands.CommandException;
+import steffan.javafxdemo.commands.CreateContactCommand;
+import steffan.javafxdemo.commands.EditContactCommand;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
@@ -14,6 +17,9 @@ import steffan.javafxdemo.view.api.Form;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.fximpl.base.JavaFXSceneController;
 import steffan.javafxdemo.view.fximpl.base.ObserveAndEditListCell;
+
+import java.util.Optional;
+import java.util.concurrent.*;
 
 public class ContactListController extends JavaFXSceneController<ContactList> {
 
@@ -110,57 +116,19 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private void createContact() {
-        try {
-            Form<ContactDTO> createContactForm =
-                    getFxViewManager().createContactForm(new ContactDTO(), "Create Contact");
-            createContactForm.setOnSubmit(c -> {
-                var contactList = getModel();
-
-                Contact contact = new Contact(c.getId(), c.getFirstName(), c.getLastName());
-                contactList.addContact(contact);
-                contactList.setModified(true);
-                getApplicationControl().getPersistenceContext().withUnitOfWork(unitOfWork -> {
-                    unitOfWork.markAsNew(contact);
-                });
-
-                createContactForm.hide();
-            });
-            createContactForm.setOnCancel(c -> createContactForm.hide());
-            createContactForm.show();
-        } catch (ViewException e) {
-            e.printStackTrace();
-        }
+        getApplicationControl().getCommandRunner().executeCommand(new CreateContactCommand(getModel(), getApplicationControl()), e -> {});
     }
 
     @FXML
     private void editContact() {
-        try {
-            Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
-            ContactDTO contactDTO = new ContactDTO();
-            contactDTO.setFirstName(selectedContact.getFirstName());
-            contactDTO.setLastName(selectedContact.getLastName());
-            Form<ContactDTO> createContactForm =
-                    getFxViewManager().createContactForm(contactDTO, "Edit Contact");
-
-            createContactForm.setOnSubmit(c -> {
-
-                selectedContact.setFirstName(c.getFirstName());
-                selectedContact.setLastName(c.getLastName());
-
-                getModel().setModified(true);
-                getApplicationControl().getPersistenceContext().withUnitOfWork(unitOfWork -> {
-                    unitOfWork.markAsModified(selectedContact);
-                });
-
-                createContactForm.hide();
-            });
-
-            createContactForm.setOnCancel(c -> createContactForm.hide());
-
-            createContactForm.show();
-        } catch (ViewException e) {
-            e.printStackTrace();
-        }
+        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
+        getApplicationControl().getCommandRunner().executeCommand(
+            new EditContactCommand(
+                    selectedContact,
+                    getModel(),
+                    getApplicationControl()),
+                    e -> {}
+            );
     }
 
 }

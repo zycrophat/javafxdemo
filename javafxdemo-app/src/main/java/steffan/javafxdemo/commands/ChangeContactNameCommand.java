@@ -4,6 +4,8 @@ import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 
+import java.util.Optional;
+
 public class ChangeContactNameCommand implements Command<Contact> {
     private final PersistenceContext persistenceContext;
     private final Contact contact;
@@ -20,7 +22,7 @@ public class ChangeContactNameCommand implements Command<Contact> {
     }
 
     @Override
-    public Contact run() {
+    public Optional<Contact> run() {
         contact.setFirstName(firstName);
         contact.setLastName(lastName);
 
@@ -28,6 +30,6 @@ public class ChangeContactNameCommand implements Command<Contact> {
 
         model.setModified(true);
 
-        return contact;
+        return Optional.of(contact);
     }
 }

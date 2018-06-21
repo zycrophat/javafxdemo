@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import steffan.javafxdemo.ApplicationControl;
+import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.view.api.Form;
@@ -16,6 +16,9 @@ import steffan.javafxdemo.view.api.ViewManager;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 public class FXViewManager implements ViewManager {
 
@@ -57,8 +60,8 @@ public class FXViewManager implements ViewManager {
             JavaFXFormController<ContactDTO> formController = loader.getController();
             formController.configure(this, applicationControl);
             formController.setModel(contactDTO);
-            Stage stage = new Stage();
-            Platform.runLater( () -> {
+
+            Stage configuredStage = createAndConfigureStage(stage -> {
                 stage.setTitle(formTitle);
                 var scene = new Scene(parent);
                 stage.setScene(scene);
@@ -74,10 +77,30 @@ public class FXViewManager implements ViewManager {
                 });
             });
 
-            return new FXForm<>(stage, formController);
+            return new FXForm<>(configuredStage, formController);
         } catch (IOException e) {
             throw new ViewException(e);
         }
+    }
+
+    private Stage createAndConfigureStage(Consumer<Stage> stageConfigurator) throws ViewException {
+        CompletableFuture<Stage> future = new CompletableFuture<>();
+        Platform.runLater(() -> {
+                Stage stage = new Stage();
+
+                stageConfigurator.accept(stage);
+                future.complete(stage);
+        });
+
+        try {
+            Stage stage = future.get();
+            if (stage != null) {
+                return stage;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new ViewException("Cannot create Stage", e);
+        }
+        throw new ViewException("Cannot create Stage");
     }
 
     public Stage getPrimaryStage() {

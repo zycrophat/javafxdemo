@@ -39,4 +39,7 @@ public class FXView<T> implements View<T> {
         return sceneController;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
 }

@@ -1,6 +1,6 @@
 package steffan.javafxdemo.view.api;
 
-import steffan.javafxdemo.ApplicationControl;
+import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 

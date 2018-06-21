@@ -1,6 +1,6 @@
 package steffan.javafxdemo.view.fximpl.base;
 
-import steffan.javafxdemo.ApplicationControl;
+import steffan.javafxdemo.control.ApplicationControl;
 
 public abstract class JavaFXSceneController<T> {
 

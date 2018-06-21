@@ -1,4 +1,4 @@
-package steffan.javafxdemo;
+package steffan.javafxdemo.control;
 
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.view.api.ViewManager;
@@ -13,4 +13,6 @@ public interface ApplicationControl {
     ViewManager getViewManager();
 
     PersistenceContext getPersistenceContext();
+
+    CommandRunner getCommandRunner();
 }
