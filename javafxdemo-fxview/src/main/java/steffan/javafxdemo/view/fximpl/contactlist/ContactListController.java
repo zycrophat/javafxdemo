@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import steffan.javafxdemo.commands.ChangeContactNameCommand;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
@@ -55,25 +56,30 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     private Contact updateContact(Contact contact, String text) {
         var names = text.split(" ", 2);
-        contact.setFirstName(names[0]);
+        String firstName = names[0];
 
-        getApplicationControl().getPersistenceContext().withUnitOfWork(unitOfWork -> {
-            unitOfWork.markAsModified(contact);
-        });
-
+        String lastName;
         if (names.length > 1) {
-            contact.setLastName(names[1]);
+            lastName = names[1];
+
         } else {
-            contact.setLastName("");
+            lastName = "";
         }
-        getModel().setModified(true);
+
+        new ChangeContactNameCommand(
+                contact,
+                firstName, lastName,
+                getModel(),
+                getApplicationControl().getPersistenceContext()
+        ).run();
+
         return contact;
     }
 
     @FXML
     private void saveContactList() {
         try {
-            getApplicationControl().getPersistenceContext().withUnitOfWorkInTransaction( (ctx, unitOfWork) -> {
+            getApplicationControl().getPersistenceContext().withUnitOfWorkInTransaction((ctx, unitOfWork) -> {
                 unitOfWork.commit(ctx);
                 getModel().setModified(false);
             });
@@ -113,7 +119,7 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
                 Contact contact = new Contact(c.getId(), c.getFirstName(), c.getLastName());
                 contactList.addContact(contact);
                 contactList.setModified(true);
-                getApplicationControl().getPersistenceContext().withUnitOfWork( unitOfWork -> {
+                getApplicationControl().getPersistenceContext().withUnitOfWork(unitOfWork -> {
                     unitOfWork.markAsNew(contact);
                 });
 
@@ -156,4 +162,5 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
             e.printStackTrace();
         }
     }
+
 }

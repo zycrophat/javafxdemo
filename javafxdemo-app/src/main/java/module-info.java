@@ -10,6 +10,7 @@ module steffan.javafxdemo.app {
     exports steffan.javafxdemo.persistence.api;
     exports steffan.javafxdemo;
     exports steffan.javafxdemo.models.viewmodel;
+    exports steffan.javafxdemo.commands;
 
     uses ViewManager;
     uses PersistenceContext;
