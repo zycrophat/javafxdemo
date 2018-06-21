@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class FXViewManager implements ViewManager {
 
@@ -40,9 +41,10 @@ public class FXViewManager implements ViewManager {
             Parent parent = loader.load();
             JavaFXSceneController<ContactList> sceneController = loader.getController();
             sceneController.configure(this, applicationControl);
-            Platform.runLater( () -> {
-                primaryStage.setScene(new Scene(parent));
-                primaryStage.setTitle("Contact list");
+
+            configureStage(() -> primaryStage, stage -> {
+                stage.setScene(new Scene(parent));
+                stage.setTitle("Contact list");
             });
 
             return new FXView<>(primaryStage, sceneController);
@@ -84,23 +86,22 @@ public class FXViewManager implements ViewManager {
     }
 
     private Stage createAndConfigureStage(Consumer<Stage> stageConfigurator) throws ViewException {
+        return configureStage(Stage::new, stageConfigurator);
+    }
+
+    private Stage configureStage(Supplier<Stage> stageSupplier, Consumer<Stage> stageConfigurator) throws ViewException {
         CompletableFuture<Stage> future = new CompletableFuture<>();
         Platform.runLater(() -> {
-                Stage stage = new Stage();
-
-                stageConfigurator.accept(stage);
-                future.complete(stage);
+            Stage stage = stageSupplier.get();
+            stageConfigurator.accept(stage);
+            future.complete(stage);
         });
 
         try {
-            Stage stage = future.get();
-            if (stage != null) {
-                return stage;
-            }
+            return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new ViewException("Cannot create Stage", e);
+            throw new ViewException("Cannot configure Stage", e);
         }
-        throw new ViewException("Cannot create Stage");
     }
 
     public Stage getPrimaryStage() {
