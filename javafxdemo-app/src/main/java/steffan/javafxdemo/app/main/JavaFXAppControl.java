@@ -28,11 +28,8 @@ public class JavaFXAppControl implements ApplicationControl {
     private boolean isInitialized = false;
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor(
-            r -> {
-                Thread t = Executors.defaultThreadFactory().newThread(r);
-                t.setDaemon(true);
-                return t;
-            });
+            new DaemonizingThreadFactory(Executors.defaultThreadFactory())
+    );
 
     JavaFXAppControl(ViewManager viewManager, PersistenceContext persistenceContext) {
         this.viewManager = requireNonNull(viewManager, "viewManager is null");
