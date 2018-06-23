@@ -33,9 +33,9 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     @SuppressWarnings("unchecked")
     private <T extends DomainObject> List<T>
     getListOfNewDomainObjectsByClass(Class<? extends DomainObject> domainObjectType) {
-        List<? extends DomainObject> newDomainObjects =
-                classToNewDomainObjectList.computeIfAbsent(domainObjectType, k -> new ArrayList<T>());
-        return (List<T>) newDomainObjects;
+        List<T> newDomainObjects =
+                (List<T>) classToNewDomainObjectList.computeIfAbsent(domainObjectType, k -> new ArrayList<T>());
+        return newDomainObjects;
     }
 
     @Override
@@ -47,9 +47,9 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     @SuppressWarnings("unchecked")
     private <T extends DomainObject> List<T>
     getListOfModifiedDomainObjectsByClass(Class<? extends DomainObject> domainObjectType) {
-        List<? extends DomainObject> modifiedDomainObjects =
-                classToModifiedDomainObjectList.computeIfAbsent(domainObjectType, k -> new ArrayList<T>());
-        return (List<T>) modifiedDomainObjects;
+        List<T> modifiedDomainObjects =
+                (List<T>) classToModifiedDomainObjectList.computeIfAbsent(domainObjectType, k -> new ArrayList<T>());
+        return modifiedDomainObjects;
     }
 
     @Override
@@ -61,9 +61,9 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     @SuppressWarnings("unchecked")
     private <T extends DomainObject> List<T>
     getListOfDeletedDomainObjectsByClass(Class<? extends DomainObject> domainObjectType) {
-        List<? extends DomainObject> deletedDomainObjects =
-                classToDeletedDomainObjectList.computeIfAbsent(domainObjectType, k -> new ArrayList<T>());
-        return (List<T>) deletedDomainObjects;
+        List<T> deletedDomainObjects =
+                (List<T>) classToDeletedDomainObjectList.computeIfAbsent(domainObjectType, k -> new ArrayList<T>());
+        return deletedDomainObjects;
     }
 
     @Override
@@ -84,7 +84,10 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
         for (var classListEntry : classToNewDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository =  context.getRepository(clazz);
-            repository.store(getListOfNewDomainObjectsByClass(clazz));
+            List<DomainObject> newDomainObjects = getListOfNewDomainObjectsByClass(clazz);
+            for (DomainObject domainObject : newDomainObjects) {
+                repository.store(domainObject, clazz);
+            }
         }
     }
 
@@ -93,7 +96,10 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
         for (var classListEntry : classToModifiedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository = context.getRepository(clazz);
-            repository.store(getListOfModifiedDomainObjectsByClass(clazz));
+            var modifiedDomainObjects = getListOfModifiedDomainObjectsByClass(clazz);
+            for(DomainObject o : modifiedDomainObjects) {
+                repository.store(o, clazz);
+            }
         }
     }
 
@@ -102,7 +108,10 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
         for (var classListEntry : classToDeletedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
             var repository = context.getRepository(clazz);
-            repository.delete(getListOfDeletedDomainObjectsByClass(clazz));
+            var deletedDomainObjects = getListOfDeletedDomainObjectsByClass(clazz);
+            for (DomainObject o : deletedDomainObjects) {
+                repository.delete(o, clazz);
+            }
         }
     }
 

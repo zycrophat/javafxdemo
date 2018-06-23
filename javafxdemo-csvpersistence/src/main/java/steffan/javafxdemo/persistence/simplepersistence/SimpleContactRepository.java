@@ -1,6 +1,7 @@
 package steffan.javafxdemo.persistence.simplepersistence;
 
 import steffan.javafxdemo.models.domainmodel.Contact;
+import steffan.javafxdemo.models.domainmodel.DomainObject;
 import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.persistence.api.Repository;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class SimpleContactRepository implements Repository<Contact> {
 
     private File dbFile = new File("contacts");
+    private static final Class<? extends DomainObject> domainClass = Contact.class;
 
     @Override
     public Optional<Contact> find(long key) throws PersistenceException {
@@ -78,7 +80,6 @@ public class SimpleContactRepository implements Repository<Contact> {
         store(List.of(object));
     }
 
-    @Override
     public void store(List<Contact> objects) throws PersistenceException {
         try {
             var contacts = loadContacts();
@@ -121,6 +122,12 @@ public class SimpleContactRepository implements Repository<Contact> {
     }
 
     @Override
+    public void store(DomainObject o, Class<? extends DomainObject> clazz) throws PersistenceException {
+        if (this.getDomainClass().isAssignableFrom(clazz)) {
+            store((Contact) o);
+        }
+    }
+
     public void delete(List<Contact> objects) throws PersistenceException {
         try {
             var contacts = loadContacts();
@@ -138,4 +145,15 @@ public class SimpleContactRepository implements Repository<Contact> {
         }
     }
 
+    @Override
+    public Class<? extends DomainObject> getDomainClass() {
+        return domainClass;
+    }
+
+    @Override
+    public void delete(DomainObject o, Class<? extends DomainObject> clazz) throws PersistenceException {
+        if (this.getDomainClass().isAssignableFrom(clazz)) {
+            delete((Contact) o);
+        }
+    }
 }

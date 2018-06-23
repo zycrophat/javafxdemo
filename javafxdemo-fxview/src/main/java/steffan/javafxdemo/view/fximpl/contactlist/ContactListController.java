@@ -6,20 +6,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import steffan.javafxdemo.commands.ChangeContactNameCommand;
-import steffan.javafxdemo.commands.CommandException;
 import steffan.javafxdemo.commands.CreateContactCommand;
 import steffan.javafxdemo.commands.EditContactCommand;
 import steffan.javafxdemo.models.domainmodel.Contact;
-import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceException;
-import steffan.javafxdemo.view.api.Form;
-import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.fximpl.base.JavaFXSceneController;
 import steffan.javafxdemo.view.fximpl.base.ObserveAndEditListCell;
-
-import java.util.Optional;
-import java.util.concurrent.*;
 
 public class ContactListController extends JavaFXSceneController<ContactList> {
 

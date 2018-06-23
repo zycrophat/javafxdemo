@@ -1,7 +1,6 @@
 package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class JavaFXApplication extends Application {
