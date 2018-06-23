@@ -7,6 +7,7 @@ import steffan.javafxdemo.persistence.api.Repository;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -76,24 +77,17 @@ public class SimpleContactRepository implements Repository<Contact> {
     }
 
     @Override
-    public void store(Contact object) throws PersistenceException {
-        store(List.of(object));
-    }
-
-    public void store(List<Contact> objects) throws PersistenceException {
+    public void store(Contact contact) throws PersistenceException {
         try {
             var contacts = loadContacts();
 
-            objects.forEach(contact -> {
-                if (isNewContact(contact)) {
-                    var id = generateId(contacts);
-                    contact.setId(id);
-                }
-                contacts.put(contact.getId(), contact);
-            });
-            dbFile.createNewFile();
+            if (isNewContact(contact)) {
+                var id = generateId(contacts);
+                contact.setId(id);
+            }
+            contacts.put(contact.getId(), contact);
+            mkCleanContactsFile();
             try(BufferedWriter writer = createBufferedWriter()) {
-
                 for (var c : contacts.values()) {
                     writer.write(String.join(",", Long.toString(c.getId()), c.getFirstName(), c.getLastName()));
                     writer.newLine();
@@ -102,6 +96,11 @@ public class SimpleContactRepository implements Repository<Contact> {
         } catch (IOException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    private void mkCleanContactsFile() throws IOException {
+        Files.delete(dbFile.toPath());
+        Files.createFile(dbFile.toPath());
     }
 
     private long generateId(Map<Long, Contact> contactMap) {
@@ -118,23 +117,11 @@ public class SimpleContactRepository implements Repository<Contact> {
 
     @Override
     public void delete(Contact object) throws PersistenceException {
-        delete(List.of(object));
-    }
-
-    @Override
-    public void store(DomainObject o, Class<? extends DomainObject> clazz) throws PersistenceException {
-        if (this.getDomainClass().isAssignableFrom(clazz)) {
-            store((Contact) o);
-        }
-    }
-
-    public void delete(List<Contact> objects) throws PersistenceException {
         try {
             var contacts = loadContacts();
-            objects.stream().map(Contact::getId).forEach(contacts::remove);
-            dbFile.createNewFile();
+            contacts.remove(object.getId());
+            mkCleanContactsFile();
             try(BufferedWriter writer = createBufferedWriter()) {
-
                 for (var c : contacts.values()) {
                     writer.write(String.join(",", Long.toString(c.getId()), c.getFirstName(), c.getLastName()));
                     writer.newLine();
@@ -142,6 +129,13 @@ public class SimpleContactRepository implements Repository<Contact> {
             }
         } catch (IOException e) {
             throw new PersistenceException(e);
+        }
+    }
+
+    @Override
+    public void store(DomainObject o, Class<? extends DomainObject> clazz) throws PersistenceException {
+        if (this.getDomainClass().isAssignableFrom(clazz)) {
+            store((Contact) o);
         }
     }
 
