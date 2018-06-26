@@ -14,10 +14,4 @@ public interface Repository<T extends DomainObject> {
     void store(T object) throws PersistenceException;
 
     void delete(T object) throws PersistenceException;
-
-    void store(DomainObject o, Class<? extends DomainObject> clazz) throws PersistenceException;
-
-    Class<? extends DomainObject> getDomainClass();
-
-    void delete(DomainObject o, Class<? extends DomainObject> clazz) throws PersistenceException;
 }

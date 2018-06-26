@@ -3,6 +3,7 @@ package steffan.javafxdemo.persistence.base;
 import steffan.javafxdemo.models.domainmodel.DomainObject;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
+import steffan.javafxdemo.persistence.api.Repository;
 import steffan.javafxdemo.persistence.api.UnitOfWork;
 
 import java.util.ArrayList;
@@ -83,11 +84,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     private void insertNewDomainObjects(PersistenceContext context) throws PersistenceException {
         for (var classListEntry : classToNewDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository =  context.getRepository(clazz);
-            List<DomainObject> newDomainObjects = getListOfNewDomainObjectsByClass(clazz);
-            for (DomainObject domainObject : newDomainObjects) {
-                repository.store(domainObject, clazz);
-            }
+            storeDomainObjects(context, clazz, getListOfNewDomainObjectsByClass(clazz));
         }
     }
 
@@ -95,23 +92,30 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
     private void updateModifiedDomainObjects(PersistenceContext context) throws PersistenceException {
         for (var classListEntry : classToModifiedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = context.getRepository(clazz);
-            var modifiedDomainObjects = getListOfModifiedDomainObjectsByClass(clazz);
-            for(DomainObject o : modifiedDomainObjects) {
-                repository.store(o, clazz);
-            }
+            storeDomainObjects(context, clazz, getListOfModifiedDomainObjectsByClass(clazz));
         }
     }
 
+    private <T extends DomainObject> void
+    storeDomainObjects(PersistenceContext context, Class<T> clazz, List<T> domainObjects) throws PersistenceException {
+        Repository<T> repository = context.getRepository(clazz);
+        for(DomainObject o : domainObjects) {
+            repository.store(clazz.cast(o));
+        }
+    }
 
     private void deleteDeletedDomainObjects(PersistenceContext context) throws PersistenceException {
         for (var classListEntry : classToDeletedDomainObjectList.entrySet()) {
             var clazz = classListEntry.getKey();
-            var repository = context.getRepository(clazz);
-            var deletedDomainObjects = getListOfDeletedDomainObjectsByClass(clazz);
-            for (DomainObject o : deletedDomainObjects) {
-                repository.delete(o, clazz);
-            }
+            deleteDomainObjects(context, clazz, getListOfDeletedDomainObjectsByClass(clazz));
+        }
+    }
+
+    private <T extends DomainObject> void
+    deleteDomainObjects(PersistenceContext context, Class<T> clazz, List<T> domainObjects) throws PersistenceException {
+        Repository<T> repository = context.getRepository(clazz);
+        for(DomainObject o : domainObjects) {
+            repository.delete(clazz.cast(o));
         }
     }
 
