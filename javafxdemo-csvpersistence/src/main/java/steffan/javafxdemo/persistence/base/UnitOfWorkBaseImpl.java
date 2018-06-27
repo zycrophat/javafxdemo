@@ -74,7 +74,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
             updateModifiedDomainObjects(context);
             deleteDeletedDomainObjects(context);
 
-            setCommitted();
+            markAsCommitted();
         } else {
             throw new IllegalStateException("Cannot commit (already committed)");
         }
@@ -124,7 +124,7 @@ public class UnitOfWorkBaseImpl implements UnitOfWork {
         return committed;
     }
 
-    private void setCommitted() {
+    private void markAsCommitted() {
         this.committed = true;
     }
 }
