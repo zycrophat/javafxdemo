@@ -10,6 +10,7 @@ import steffan.javafxdemo.view.api.ViewException;
 import java.util.Optional;
 
 public class EditContactCommand implements Command<Contact> {
+
     private final Contact contact;
     private final ApplicationControl applicationControl;
     private final ContactList contactList;

@@ -10,7 +10,7 @@ public class FXView<T> implements View<T> {
 
     private JavaFXSceneController<T> sceneController;
 
-    public FXView(Stage stage, JavaFXSceneController<T> sceneController) {
+    FXView(Stage stage, JavaFXSceneController<T> sceneController) {
         this.stage = stage;
         this.sceneController = sceneController;
     }

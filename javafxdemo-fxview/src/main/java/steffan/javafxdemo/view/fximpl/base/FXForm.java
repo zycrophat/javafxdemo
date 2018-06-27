@@ -4,13 +4,16 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import steffan.javafxdemo.view.api.Form;
 
+import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
+
+import static steffan.javafxdemo.view.fximpl.base.PlatformHelper.runLaterAndWait;
 
 public class FXForm<T> extends FXView<T> implements Form<T> {
 
     private JavaFXFormController<T> formController;
 
-    public FXForm(Stage stage, JavaFXFormController<T> formController) {
+    FXForm(Stage stage, JavaFXFormController<T> formController) {
         super(stage, formController);
         this.formController = formController;
     }
@@ -27,6 +30,6 @@ public class FXForm<T> extends FXView<T> implements Form<T> {
 
     @Override
     public void showAndWait() {
-        Platform.runLater(getStage()::showAndWait);
+        runLaterAndWait(getStage()::showAndWait);
     }
 }

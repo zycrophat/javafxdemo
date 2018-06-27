@@ -7,16 +7,16 @@ import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.view.api.ViewException;
 
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
 
 public class CreateContactCommand implements Command<Contact> {
-    private final ApplicationControl applicationControl;
-    private final ContactList contactList;
 
-    public CreateContactCommand(ContactList contactList, ApplicationControl applicationControl) {
-        this.contactList =  requireNonNull(contactList);
+    private final ApplicationControl applicationControl;
+
+    public CreateContactCommand(ApplicationControl applicationControl) {
         this.applicationControl = requireNonNull(applicationControl);
     }
 
@@ -33,8 +33,6 @@ public class CreateContactCommand implements Command<Contact> {
             createContactForm.setOnSubmit(c -> {
                 Contact contact = new Contact(c.getId(), c.getFirstName(), c.getLastName());
 
-                contactList.addContact(contact);
-                contactList.setModified(true);
                 persistenceCtx.withUnitOfWork(unitOfWork -> {
                     unitOfWork.markAsNew(contact);
                 });

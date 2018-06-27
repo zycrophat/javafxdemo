@@ -45,4 +45,7 @@ public class ContactList {
         this.contacts = contacts;
     }
 
+    public void removeContact(Contact contact) {
+        this.contacts.remove(contact);
+    }
 }

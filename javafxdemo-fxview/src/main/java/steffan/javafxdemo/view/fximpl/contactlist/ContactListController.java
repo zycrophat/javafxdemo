@@ -1,5 +1,7 @@
 package steffan.javafxdemo.view.fximpl.contactlist;
 
+import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -7,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import steffan.javafxdemo.commands.ChangeContactNameCommand;
 import steffan.javafxdemo.commands.CreateContactCommand;
+import steffan.javafxdemo.commands.DeleteContactCommand;
 import steffan.javafxdemo.commands.EditContactCommand;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.viewmodel.ContactList;
@@ -25,6 +28,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     @FXML
     private Button editButton;
 
+    @FXML
+    private Button deleteButton;
+
     private static ObservableValue<String> contactToObservableStringValue(Contact contact) {
         return contact.idProperty().asString().
                 concat(": ").
@@ -40,7 +46,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     @Override
     protected void initialize(ContactList model) {
         saveButton.disableProperty().bind(model.modifiedProperty().not());
-        editButton.disableProperty().bind(contactsListView.getSelectionModel().selectedItemProperty().isNull());
+        BooleanBinding noContactIsSelectedBinding = contactsListView.getSelectionModel().selectedItemProperty().isNull();
+        editButton.disableProperty().bind(noContactIsSelectedBinding);
+        deleteButton.disableProperty().bind(noContactIsSelectedBinding);
 
         contactsListView.setCellFactory(
                 listView -> new ObserveAndEditListCell<>(
@@ -65,12 +73,15 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
             lastName = "";
         }
 
-        new ChangeContactNameCommand(
+        getApplicationControl().getCommandRunner().executeCommand(
+            new ChangeContactNameCommand(
                 contact,
                 firstName, lastName,
                 getModel(),
                 getApplicationControl().getPersistenceContext()
-        ).run();
+            ),
+            e -> {}
+        );
 
         return contact;
     }
@@ -109,7 +120,20 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private void createContact() {
-        getApplicationControl().getCommandRunner().executeCommand(new CreateContactCommand(getModel(), getApplicationControl()), e -> {});
+        CreateContactCommand command = new CreateContactCommand(getApplicationControl());
+
+
+        getApplicationControl().getCommandRunner().executeCommand(
+                command,
+                optionalAddedContact ->
+                        optionalAddedContact.ifPresent(addedContact -> {
+                            Platform.runLater(() -> {
+                                ContactList contactList = getModel();
+                                contactList.addContact(addedContact);
+                                contactList.setModified(true);
+                            });
+                        }),
+                e -> {});
     }
 
     @FXML
@@ -122,6 +146,26 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
                     getApplicationControl()),
                     e -> {}
             );
+    }
+
+    @FXML
+    private void deleteContact() {
+        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
+        DeleteContactCommand command = new DeleteContactCommand(
+                selectedContact,
+                getApplicationControl());
+
+        getApplicationControl().getCommandRunner().executeCommand(
+                command,
+                optionalRemovedContact -> optionalRemovedContact.ifPresent(removedContact -> {
+                    Platform.runLater(() -> {
+                        ContactList contactList = getModel();
+                        contactList.removeContact(removedContact);
+                        contactList.setModified(true);
+                    });
+                }),
+                e -> {}
+        );
     }
 
 }

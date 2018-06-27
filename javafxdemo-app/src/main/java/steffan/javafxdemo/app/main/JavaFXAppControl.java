@@ -1,7 +1,5 @@
 package steffan.javafxdemo.app.main;
 
-import steffan.javafxdemo.commands.Command;
-import steffan.javafxdemo.commands.CommandException;
 import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.control.CommandRunner;
 import steffan.javafxdemo.models.domainmodel.Contact;
@@ -11,17 +9,15 @@ import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.view.api.ViewException;
 import steffan.javafxdemo.view.api.ViewManager;
 
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 
 
 public class JavaFXAppControl implements ApplicationControl {
 
+    private final ExecutorServiceCommandRunner executorServiceCommandRunner;
     private ViewManager viewManager;
     private PersistenceContext persistenceContext;
 
@@ -34,6 +30,7 @@ public class JavaFXAppControl implements ApplicationControl {
     JavaFXAppControl(ViewManager viewManager, PersistenceContext persistenceContext) {
         this.viewManager = requireNonNull(viewManager, "viewManager is null");
         this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
+        executorServiceCommandRunner = new ExecutorServiceCommandRunner(executorService);
     }
 
     @Override
@@ -88,19 +85,7 @@ public class JavaFXAppControl implements ApplicationControl {
 
     @Override
     public CommandRunner getCommandRunner() {
-        return new CommandRunner() {
-            @Override
-            public <T> Future<Optional<T>> executeCommand(Command<T> command, Consumer<CommandException> onCommandException) {
-                return executorService.submit(() -> {
-                    try {
-                        return command.run();
-                    } catch (CommandException e) {
-                        onCommandException.accept(e);
-                        return Optional.empty();
-                    }
-                });
-            }
-        };
+        return executorServiceCommandRunner;
     }
 
 }

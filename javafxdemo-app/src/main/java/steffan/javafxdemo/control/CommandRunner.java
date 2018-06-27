@@ -10,4 +10,5 @@ import java.util.function.Consumer;
 public interface CommandRunner {
 
     <T> Future<Optional<T>> executeCommand(Command<T> command, Consumer<CommandException> onCommandException);
+    <T> Future<Optional<T>> executeCommand(Command<T> command, Consumer<Optional<T>> completionHandler, Consumer<CommandException> onCommandException);
 }

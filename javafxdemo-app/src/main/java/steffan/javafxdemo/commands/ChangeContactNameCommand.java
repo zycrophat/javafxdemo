@@ -7,6 +7,7 @@ import steffan.javafxdemo.persistence.api.PersistenceContext;
 import java.util.Optional;
 
 public class ChangeContactNameCommand implements Command<Contact> {
+
     private final PersistenceContext persistenceContext;
     private final Contact contact;
     private final String firstName;

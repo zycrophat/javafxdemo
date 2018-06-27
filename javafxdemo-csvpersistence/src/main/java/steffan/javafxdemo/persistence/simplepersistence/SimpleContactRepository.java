@@ -103,7 +103,7 @@ public class SimpleContactRepository implements Repository<Contact> {
     }
 
     private long generateId(Map<Long, Contact> contactMap) {
-        return contactMap.size() + 1L;
+        return contactMap.keySet().stream().max(Long::compareTo).orElse(1L) + 1L;
     }
 
     private boolean isNewContact(Contact contact) {
