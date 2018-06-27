@@ -1,7 +1,11 @@
 package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.application.Platform;
+import steffan.javafxdemo.view.api.ViewException;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
 
 class PlatformHelper {
@@ -18,6 +22,25 @@ class PlatformHelper {
             semaphore.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    static <T> T callLater(Callable<T> callable) throws ViewException {
+        CompletableFuture<T> future = new CompletableFuture<>();
+
+        Platform.runLater(() -> {
+            try {
+                T result = callable.call();
+                future.complete(result);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new ViewException(e);
         }
     }
 }

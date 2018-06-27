@@ -1,6 +1,5 @@
 package steffan.javafxdemo.view.fximpl.base;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,10 +15,10 @@ import steffan.javafxdemo.view.api.ViewManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static steffan.javafxdemo.view.fximpl.base.PlatformHelper.callLater;
 
 public class FXViewManager implements ViewManager {
 
@@ -90,18 +89,11 @@ public class FXViewManager implements ViewManager {
     }
 
     private Stage configureStage(Supplier<Stage> stageSupplier, Consumer<Stage> stageConfigurator) throws ViewException {
-        CompletableFuture<Stage> future = new CompletableFuture<>();
-        Platform.runLater(() -> {
+        return callLater(() -> {
             Stage stage = stageSupplier.get();
             stageConfigurator.accept(stage);
-            future.complete(stage);
+            return stage;
         });
-
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new ViewException("Cannot configure Stage", e);
-        }
     }
 
     public Stage getPrimaryStage() {
