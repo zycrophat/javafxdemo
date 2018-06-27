@@ -6,8 +6,8 @@ import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;
 import steffan.javafxdemo.persistence.api.PersistenceException;
-import steffan.javafxdemo.view.api.ViewException;
-import steffan.javafxdemo.view.api.ViewManager;
+import steffan.javafxdemo.view.api.UIViewException;
+import steffan.javafxdemo.view.api.UIViewManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +18,7 @@ import static java.util.Objects.requireNonNull;
 public class JavaFXAppControl implements ApplicationControl {
 
     private final ExecutorServiceCommandRunner executorServiceCommandRunner;
-    private ViewManager viewManager;
+    private UIViewManager UIViewManager;
     private PersistenceContext persistenceContext;
 
     private boolean isInitialized = false;
@@ -27,8 +27,8 @@ public class JavaFXAppControl implements ApplicationControl {
             new DaemonizingThreadFactory(Executors.defaultThreadFactory())
     );
 
-    JavaFXAppControl(ViewManager viewManager, PersistenceContext persistenceContext) {
-        this.viewManager = requireNonNull(viewManager, "viewManager is null");
+    JavaFXAppControl(UIViewManager UIViewManager, PersistenceContext persistenceContext) {
+        this.UIViewManager = requireNonNull(UIViewManager, "UIViewManager is null");
         this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
         executorServiceCommandRunner = new ExecutorServiceCommandRunner(executorService);
     }
@@ -36,8 +36,8 @@ public class JavaFXAppControl implements ApplicationControl {
     @Override
     public void initialize() {
         try {
-            viewManager.initialize(this);
-        } catch (ViewException e) {
+            UIViewManager.initialize(this);
+        } catch (UIViewException e) {
             e.printStackTrace();
             System.exit(666);
         }
@@ -51,14 +51,14 @@ public class JavaFXAppControl implements ApplicationControl {
         }
 
         try {
-            var contactsView = viewManager.createContactsView();
+            var contactsView = UIViewManager.createContactsView();
 
             var contacts = persistenceContext.getRepository(Contact.class).find();
             ContactList contactList = new ContactList(contacts);
 
             contactsView.setModel(contactList);
             contactsView.show();
-        } catch (ViewException | PersistenceException e) {
+        } catch (UIViewException | PersistenceException e) {
             e.printStackTrace();
             System.exit(666);
         }
@@ -74,8 +74,8 @@ public class JavaFXAppControl implements ApplicationControl {
     }
 
     @Override
-    public ViewManager getViewManager() {
-        return viewManager;
+    public UIViewManager getUIViewManager() {
+        return UIViewManager;
     }
 
     @Override

@@ -1,5 +1,5 @@
 import steffan.javafxdemo.persistence.api.PersistenceContext;
-import steffan.javafxdemo.view.api.ViewManager;
+import steffan.javafxdemo.view.api.UIViewManager;
 
 module steffan.javafxdemo.app {
 
@@ -12,6 +12,6 @@ module steffan.javafxdemo.app {
     exports steffan.javafxdemo.models.viewmodel;
     exports steffan.javafxdemo.commands;
 
-    uses ViewManager;
+    uses UIViewManager;
     uses PersistenceContext;
 }

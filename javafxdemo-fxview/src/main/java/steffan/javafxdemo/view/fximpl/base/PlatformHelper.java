@@ -1,7 +1,7 @@
 package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.application.Platform;
-import steffan.javafxdemo.view.api.ViewException;
+import steffan.javafxdemo.view.api.UIViewException;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +25,7 @@ class PlatformHelper {
         }
     }
 
-    static <T> T callLater(Callable<T> callable) throws ViewException {
+    static <T> T callLater(Callable<T> callable) throws UIViewException {
         CompletableFuture<T> future = new CompletableFuture<>();
 
         Platform.runLater(() -> {
@@ -40,7 +40,7 @@ class PlatformHelper {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new ViewException(e);
+            throw new UIViewException(e);
         }
     }
 }

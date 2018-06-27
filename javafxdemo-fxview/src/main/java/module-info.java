@@ -1,5 +1,5 @@
-import steffan.javafxdemo.view.api.ViewManager;
-import steffan.javafxdemo.view.fximpl.base.FXViewManager;
+import steffan.javafxdemo.view.api.UIViewManager;
+import steffan.javafxdemo.view.fximpl.base.FXUIViewManager;
 
 module steffan.javafxdemo.fxview {
     requires steffan.javafxdemo.app;
@@ -11,5 +11,5 @@ module steffan.javafxdemo.fxview {
     opens steffan.javafxdemo.view.fximpl.base to javafx.fxml;
     opens steffan.javafxdemo.view.fximpl.contactlist to javafx.fxml;
 
-    provides ViewManager with FXViewManager;
+    provides UIViewManager with FXUIViewManager;
 }

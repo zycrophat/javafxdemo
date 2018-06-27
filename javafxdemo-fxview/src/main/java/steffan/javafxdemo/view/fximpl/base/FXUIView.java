@@ -2,15 +2,15 @@ package steffan.javafxdemo.view.fximpl.base;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import steffan.javafxdemo.view.api.View;
+import steffan.javafxdemo.view.api.UIView;
 
-public class FXView<T> implements View<T> {
+public class FXUIView<T> implements UIView<T> {
 
     private Stage stage;
 
     private JavaFXSceneController<T> sceneController;
 
-    FXView(Stage stage, JavaFXSceneController<T> sceneController) {
+    FXUIView(Stage stage, JavaFXSceneController<T> sceneController) {
         this.stage = stage;
         this.sceneController = sceneController;
     }

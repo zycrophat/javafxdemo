@@ -7,7 +7,7 @@ public abstract class JavaFXSceneController<T> {
     private ApplicationControl applicationControl;
     private T model;
 
-    private FXViewManager fxViewManager;
+    private FXUIViewManager fxViewManager;
 
     public T getModel() {
         return model;
@@ -19,11 +19,11 @@ public abstract class JavaFXSceneController<T> {
         initialize(model);
     }
 
-    public FXViewManager getFxViewManager() {
+    public FXUIViewManager getFxViewManager() {
         return fxViewManager;
     }
 
-    public void setFxViewManager(FXViewManager fxViewManager) {
+    public void setFxViewManager(FXUIViewManager fxViewManager) {
         this.fxViewManager = fxViewManager;
     }
 
@@ -35,7 +35,7 @@ public abstract class JavaFXSceneController<T> {
         this.applicationControl = applicationControl;
     }
 
-    public void configure(FXViewManager fxViewManager, ApplicationControl applicationControl) {
+    public void configure(FXUIViewManager fxViewManager, ApplicationControl applicationControl) {
         setFxViewManager(fxViewManager);
         setApplicationControl(applicationControl);
     }

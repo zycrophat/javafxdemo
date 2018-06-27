@@ -1,7 +1,7 @@
 package steffan.javafxdemo.control;
 
 import steffan.javafxdemo.persistence.api.PersistenceContext;
-import steffan.javafxdemo.view.api.ViewManager;
+import steffan.javafxdemo.view.api.UIViewManager;
 
 public interface ApplicationControl {
     void initialize();
@@ -10,7 +10,7 @@ public interface ApplicationControl {
 
     boolean isInitialized();
 
-    ViewManager getViewManager();
+    UIViewManager getUIViewManager();
 
     PersistenceContext getPersistenceContext();
 

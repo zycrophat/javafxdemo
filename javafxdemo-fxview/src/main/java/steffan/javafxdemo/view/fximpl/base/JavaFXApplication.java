@@ -5,9 +5,9 @@ import javafx.stage.Stage;
 
 public class JavaFXApplication extends Application {
 
-    private static FXViewManager fxViewManager;
+    private static FXUIViewManager fxViewManager;
 
-    public static void initialize(FXViewManager fxViewManager) {
+    public static void initialize(FXUIViewManager fxViewManager) {
         JavaFXApplication.fxViewManager = fxViewManager;
         new Thread(Application::launch).start();
     }

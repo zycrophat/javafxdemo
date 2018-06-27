@@ -3,11 +3,9 @@ package steffan.javafxdemo.commands;
 import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
-import steffan.javafxdemo.models.viewmodel.ContactList;
-import steffan.javafxdemo.view.api.ViewException;
+import steffan.javafxdemo.view.api.UIViewException;
 
 import java.util.Optional;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
@@ -23,7 +21,7 @@ public class CreateContactCommand implements Command<Contact> {
     @Override
     public Optional<Contact> run() throws CommandException {
 
-        var viewManager = applicationControl.getViewManager();
+        var viewManager = applicationControl.getUIViewManager();
         var persistenceCtx = applicationControl.getPersistenceContext();
         AtomicReference<Contact> contactAtomicReference = new AtomicReference<>();
 
@@ -46,7 +44,7 @@ public class CreateContactCommand implements Command<Contact> {
             });
 
             createContactForm.showAndWait();
-        } catch (ViewException e) {
+        } catch (UIViewException e) {
             e.printStackTrace();
             throw new CommandException(e);
         }

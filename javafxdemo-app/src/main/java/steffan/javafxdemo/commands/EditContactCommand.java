@@ -4,8 +4,8 @@ import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
-import steffan.javafxdemo.view.api.Form;
-import steffan.javafxdemo.view.api.ViewException;
+import steffan.javafxdemo.view.api.UIForm;
+import steffan.javafxdemo.view.api.UIViewException;
 
 import java.util.Optional;
 
@@ -29,10 +29,10 @@ public class EditContactCommand implements Command<Contact> {
         contactDTO.setLastName(contact.getLastName());
 
         try {
-            Form<ContactDTO> createContactForm =
-                    applicationControl.getViewManager().createContactForm(contactDTO, "Edit Contact");
+            UIForm<ContactDTO> createContactUIForm =
+                    applicationControl.getUIViewManager().createContactForm(contactDTO, "Edit Contact");
 
-            createContactForm.setOnSubmit(c -> {
+            createContactUIForm.setOnSubmit(c -> {
 
                 contact.setFirstName(c.getFirstName());
                 contact.setLastName(c.getLastName());
@@ -42,14 +42,14 @@ public class EditContactCommand implements Command<Contact> {
                     unitOfWork.markAsModified(contact);
                 });
 
-                createContactForm.hide();
+                createContactUIForm.hide();
             });
 
-            createContactForm.setOnCancel(c -> createContactForm.hide());
+            createContactUIForm.setOnCancel(c -> createContactUIForm.hide());
 
-            createContactForm.showAndWait();
+            createContactUIForm.showAndWait();
             return Optional.of(contact);
-        } catch (ViewException e) {
+        } catch (UIViewException e) {
            throw new CommandException(e);
         }
     }

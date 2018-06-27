@@ -2,7 +2,7 @@ package steffan.javafxdemo.view.api;
 
 import java.util.function.Consumer;
 
-public interface Form<T> extends View<T>{
+public interface UIForm<T> extends UIView<T> {
 
     void setOnSubmit(Consumer<T> onSubmit);
 

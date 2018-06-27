@@ -1,19 +1,17 @@
 package steffan.javafxdemo.view.fximpl.base;
 
-import javafx.application.Platform;
 import javafx.stage.Stage;
-import steffan.javafxdemo.view.api.Form;
+import steffan.javafxdemo.view.api.UIForm;
 
-import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 import static steffan.javafxdemo.view.fximpl.base.PlatformHelper.runLaterAndWait;
 
-public class FXForm<T> extends FXView<T> implements Form<T> {
+public class FXUIForm<T> extends FXUIView<T> implements UIForm<T> {
 
     private JavaFXFormController<T> formController;
 
-    FXForm(Stage stage, JavaFXFormController<T> formController) {
+    FXUIForm(Stage stage, JavaFXFormController<T> formController) {
         super(stage, formController);
         this.formController = formController;
     }

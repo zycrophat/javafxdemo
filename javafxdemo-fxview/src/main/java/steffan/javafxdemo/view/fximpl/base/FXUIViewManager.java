@@ -8,10 +8,10 @@ import javafx.stage.Stage;
 import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
-import steffan.javafxdemo.view.api.Form;
-import steffan.javafxdemo.view.api.View;
-import steffan.javafxdemo.view.api.ViewException;
-import steffan.javafxdemo.view.api.ViewManager;
+import steffan.javafxdemo.view.api.UIForm;
+import steffan.javafxdemo.view.api.UIView;
+import steffan.javafxdemo.view.api.UIViewManager;
+import steffan.javafxdemo.view.api.UIViewException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,21 +20,21 @@ import java.util.function.Supplier;
 
 import static steffan.javafxdemo.view.fximpl.base.PlatformHelper.callLater;
 
-public class FXViewManager implements ViewManager {
+public class FXUIViewManager implements UIViewManager {
 
     private ApplicationControl applicationControl;
 
     private Stage primaryStage;
 
     @Override
-    public void initialize(ApplicationControl applicationControl) throws ViewException {
+    public void initialize(ApplicationControl applicationControl) throws UIViewException {
         this.applicationControl = applicationControl;
         JavaFXApplication.initialize(this);
     }
 
     @Override
-    public View<ContactList> createContactsView() throws ViewException {
-        URL resource = FXViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/ContactList.fxml");
+    public UIView<ContactList> createContactsView() throws UIViewException {
+        URL resource = FXUIViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/ContactList.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         try {
             Parent parent = loader.load();
@@ -46,15 +46,15 @@ public class FXViewManager implements ViewManager {
                 stage.setTitle("Contact list");
             });
 
-            return new FXView<>(primaryStage, sceneController);
+            return new FXUIView<>(primaryStage, sceneController);
         } catch (IOException e) {
-            throw new ViewException(e);
+            throw new UIViewException(e);
         }
     }
 
     @Override
-    public Form<ContactDTO> createContactForm(ContactDTO contactDTO, String formTitle) throws ViewException {
-        URL resource = FXViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/CreateContact.fxml");
+    public UIForm<ContactDTO> createContactForm(ContactDTO contactDTO, String formTitle) throws UIViewException {
+        URL resource = FXUIViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/CreateContact.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         try {
             Parent parent = loader.load();
@@ -78,17 +78,17 @@ public class FXViewManager implements ViewManager {
                 });
             });
 
-            return new FXForm<>(configuredStage, formController);
+            return new FXUIForm<>(configuredStage, formController);
         } catch (IOException e) {
-            throw new ViewException(e);
+            throw new UIViewException(e);
         }
     }
 
-    private Stage createAndConfigureStage(Consumer<Stage> stageConfigurator) throws ViewException {
+    private Stage createAndConfigureStage(Consumer<Stage> stageConfigurator) throws UIViewException {
         return configureStage(Stage::new, stageConfigurator);
     }
 
-    private Stage configureStage(Supplier<Stage> stageSupplier, Consumer<Stage> stageConfigurator) throws ViewException {
+    private Stage configureStage(Supplier<Stage> stageSupplier, Consumer<Stage> stageConfigurator) throws UIViewException {
         return callLater(() -> {
             Stage stage = stageSupplier.get();
             stageConfigurator.accept(stage);

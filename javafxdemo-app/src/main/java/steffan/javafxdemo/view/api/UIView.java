@@ -1,6 +1,6 @@
 package steffan.javafxdemo.view.api;
 
-public interface View<T> {
+public interface UIView<T> {
 
     void setModel(T model);
 
