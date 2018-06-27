@@ -1,5 +1,6 @@
-package steffan.javafxdemo.commands;
+package steffan.javafxdemo.commands.contactcommands;
 
+import steffan.javafxdemo.commands.base.Command;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.persistence.api.PersistenceContext;

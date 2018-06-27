@@ -1,5 +1,7 @@
-package steffan.javafxdemo.commands;
+package steffan.javafxdemo.commands.contactcommands;
 
+import steffan.javafxdemo.commands.base.Command;
+import steffan.javafxdemo.commands.base.CommandException;
 import steffan.javafxdemo.control.ApplicationControl;
 import steffan.javafxdemo.models.domainmodel.Contact;
 import steffan.javafxdemo.models.domainmodel.ContactDTO;

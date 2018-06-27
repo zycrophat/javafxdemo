@@ -1,4 +1,4 @@
-package steffan.javafxdemo.commands;
+package steffan.javafxdemo.commands.base;
 
 import java.util.Optional;
 

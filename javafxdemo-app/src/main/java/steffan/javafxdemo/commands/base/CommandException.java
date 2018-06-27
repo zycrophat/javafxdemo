@@ -1,4 +1,4 @@
-package steffan.javafxdemo.commands;
+package steffan.javafxdemo.commands.base;
 
 public class CommandException extends Exception {
     public CommandException() {

@@ -1,7 +1,7 @@
 package steffan.javafxdemo.control;
 
-import steffan.javafxdemo.commands.Command;
-import steffan.javafxdemo.commands.CommandException;
+import steffan.javafxdemo.commands.base.Command;
+import steffan.javafxdemo.commands.base.CommandException;
 
 import java.util.Optional;
 import java.util.concurrent.Future;
