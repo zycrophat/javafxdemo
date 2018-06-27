@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 class ItemEditingStringConverter<T> extends StringConverter<T> {
 
     private Function<T, String> itemToEditText;
-    private java.util.function.BiFunction<T, String, T> itemEditor;
+    private BiFunction<T, String, T> itemEditor;
     private Supplier<T> itemSupplier;
 
     public ItemEditingStringConverter(Function<T, String> itemToEditText, BiFunction<T, String, T> itemEditor, Supplier<T> itemSupplier) {
