@@ -32,7 +32,7 @@ public class EditContactCommand implements Command<Contact> {
 
         try {
             UIForm<ContactDTO> createContactUIForm =
-                    applicationControl.getUIViewManager().createContactForm(contactDTO, "Edit Contact");
+                    applicationControl.getUiViewManager().createContactUIForm(contactDTO, "Edit Contact");
 
             createContactUIForm.setOnSubmit(c -> {
 

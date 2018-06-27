@@ -33,7 +33,7 @@ public class FXUIViewManager implements UIViewManager {
     }
 
     @Override
-    public UIView<ContactList> createContactsView() throws UIViewException {
+    public UIView<ContactList> createContactsUIView() throws UIViewException {
         URL resource = FXUIViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/ContactList.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         try {
@@ -53,7 +53,7 @@ public class FXUIViewManager implements UIViewManager {
     }
 
     @Override
-    public UIForm<ContactDTO> createContactForm(ContactDTO contactDTO, String formTitle) throws UIViewException {
+    public UIForm<ContactDTO> createContactUIForm(ContactDTO contactDTO, String formTitle) throws UIViewException {
         URL resource = FXUIViewManager.class.getResource("/steffan/javafxdemo/view/fximpl/contactlist/CreateContact.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         try {

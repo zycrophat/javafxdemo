@@ -18,7 +18,7 @@ import static java.util.Objects.requireNonNull;
 public class JavaFXAppControl implements ApplicationControl {
 
     private final ExecutorServiceCommandRunner executorServiceCommandRunner;
-    private UIViewManager UIViewManager;
+    private UIViewManager uiViewManager;
     private PersistenceContext persistenceContext;
 
     private boolean isInitialized = false;
@@ -27,8 +27,8 @@ public class JavaFXAppControl implements ApplicationControl {
             new DaemonizingThreadFactory(Executors.defaultThreadFactory())
     );
 
-    JavaFXAppControl(UIViewManager UIViewManager, PersistenceContext persistenceContext) {
-        this.UIViewManager = requireNonNull(UIViewManager, "UIViewManager is null");
+    JavaFXAppControl(UIViewManager uiViewManager, PersistenceContext persistenceContext) {
+        this.uiViewManager = requireNonNull(uiViewManager, "uiViewManager is null");
         this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
         executorServiceCommandRunner = new ExecutorServiceCommandRunner(executorService);
     }
@@ -36,7 +36,7 @@ public class JavaFXAppControl implements ApplicationControl {
     @Override
     public void initialize() {
         try {
-            UIViewManager.initialize(this);
+            uiViewManager.initialize(this);
         } catch (UIViewException e) {
             e.printStackTrace();
             System.exit(666);
@@ -51,7 +51,7 @@ public class JavaFXAppControl implements ApplicationControl {
         }
 
         try {
-            var contactsView = UIViewManager.createContactsView();
+            var contactsView = uiViewManager.createContactsUIView();
 
             var contacts = persistenceContext.getRepository(Contact.class).find();
             ContactList contactList = new ContactList(contacts);
@@ -74,8 +74,8 @@ public class JavaFXAppControl implements ApplicationControl {
     }
 
     @Override
-    public UIViewManager getUIViewManager() {
-        return UIViewManager;
+    public UIViewManager getUiViewManager() {
+        return uiViewManager;
     }
 
     @Override

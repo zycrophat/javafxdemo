@@ -23,12 +23,12 @@ public class CreateContactCommand implements Command<Contact> {
     @Override
     public Optional<Contact> run() throws CommandException {
 
-        var viewManager = applicationControl.getUIViewManager();
+        var viewManager = applicationControl.getUiViewManager();
         var persistenceCtx = applicationControl.getPersistenceContext();
         AtomicReference<Contact> contactAtomicReference = new AtomicReference<>();
 
         try {
-            var createContactForm = viewManager.createContactForm(new ContactDTO(), "Create Contact");
+            var createContactForm = viewManager.createContactUIForm(new ContactDTO(), "Create Contact");
 
             createContactForm.setOnSubmit(c -> {
                 Contact contact = new Contact(c.getId(), c.getFirstName(), c.getLastName());

@@ -10,7 +10,7 @@ public interface ApplicationControl {
 
     boolean isInitialized();
 
-    UIViewManager getUIViewManager();
+    UIViewManager getUiViewManager();
 
     PersistenceContext getPersistenceContext();
 

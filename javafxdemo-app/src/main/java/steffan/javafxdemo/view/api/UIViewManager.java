@@ -8,7 +8,7 @@ public interface UIViewManager {
 
     void initialize(ApplicationControl applicationControl) throws UIViewException;
 
-    UIView<ContactList> createContactsView() throws UIViewException;
+    UIView<ContactList> createContactsUIView() throws UIViewException;
 
-    UIForm<ContactDTO> createContactForm(ContactDTO contactDTO, String formTitle) throws UIViewException;
+    UIForm<ContactDTO> createContactUIForm(ContactDTO contactDTO, String formTitle) throws UIViewException;
 }

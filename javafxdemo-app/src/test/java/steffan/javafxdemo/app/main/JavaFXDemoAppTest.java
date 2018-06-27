@@ -24,6 +24,6 @@ public class JavaFXDemoAppTest {
         app.initialize();
 
         assertThat(app.isInitialized(), is(true));
-        assertThat(app.getUIViewManager(), is(notNullValue()));
+        assertThat(app.getUiViewManager(), is(notNullValue()));
     }
 }
