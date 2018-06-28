@@ -10,8 +10,8 @@ import steffan.javafxdemo.models.domainmodel.ContactDTO;
 import steffan.javafxdemo.models.viewmodel.ContactList;
 import steffan.javafxdemo.view.api.UIForm;
 import steffan.javafxdemo.view.api.UIView;
-import steffan.javafxdemo.view.api.UIViewManager;
 import steffan.javafxdemo.view.api.UIViewException;
+import steffan.javafxdemo.view.api.UIViewManager;
 
 import java.io.IOException;
 import java.net.URL;
