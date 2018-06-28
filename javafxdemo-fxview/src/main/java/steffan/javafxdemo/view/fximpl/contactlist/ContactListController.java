@@ -2,6 +2,8 @@ package steffan.javafxdemo.view.fximpl.contactlist;
 
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -17,6 +19,8 @@ import steffan.javafxdemo.persistence.api.PersistenceException;
 import steffan.javafxdemo.view.fximpl.base.JavaFXSceneController;
 import steffan.javafxdemo.view.fximpl.base.ObserveAndEditListCell;
 
+import static steffan.javafxdemo.control.CommandRunHelper.run;
+
 public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
@@ -30,6 +34,8 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private Button deleteButton;
+
+    private BooleanProperty deletionIsInProgress = new SimpleBooleanProperty(false);
 
     private static ObservableValue<String> contactToObservableStringValue(Contact contact) {
         return contact.idProperty().asString().
@@ -48,7 +54,7 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         saveButton.disableProperty().bind(model.modifiedProperty().not());
         BooleanBinding noContactIsSelectedBinding = contactsListView.getSelectionModel().selectedItemProperty().isNull();
         editButton.disableProperty().bind(noContactIsSelectedBinding);
-        deleteButton.disableProperty().bind(noContactIsSelectedBinding);
+        deleteButton.disableProperty().bind(noContactIsSelectedBinding.or(deletionIsInProgress));
 
         contactsListView.setCellFactory(
                 listView -> new ObserveAndEditListCell<>(
@@ -73,15 +79,16 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
             lastName = "";
         }
 
-        getApplicationControl().getCommandRunner().executeCommand(
-            new ChangeContactNameCommand(
+        ChangeContactNameCommand changeContactNameCommand = new ChangeContactNameCommand(
                 contact,
                 firstName, lastName,
                 getModel(),
                 getApplicationControl().getPersistenceContext()
-            ),
-            e -> {}
         );
+
+        run(changeContactNameCommand)
+                .using(getApplicationControl().getCommandRunner())
+                .execute();
 
         return contact;
     }
@@ -122,30 +129,33 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     private void createContact() {
         CreateContactCommand command = new CreateContactCommand(getApplicationControl());
 
-
-        getApplicationControl().getCommandRunner().executeCommand(
-                command,
+        run(command)
+            .using(getApplicationControl().getCommandRunner())
+            .onCompletion(
                 optionalAddedContact ->
-                        optionalAddedContact.ifPresent(addedContact -> {
-                            Platform.runLater(() -> {
-                                ContactList contactList = getModel();
-                                contactList.addContact(addedContact);
-                                contactList.setModified(true);
-                            });
-                        }),
-                e -> {});
+                    optionalAddedContact.ifPresent(addedContact -> {
+                        Platform.runLater(() -> {
+                            ContactList contactList = getModel();
+                            contactList.addContact(addedContact);
+                            contactList.setModified(true);
+                        });
+                    })
+            )
+            .execute();
     }
 
     @FXML
     private void editContact() {
         Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
-        getApplicationControl().getCommandRunner().executeCommand(
-            new EditContactCommand(
-                    selectedContact,
-                    getModel(),
-                    getApplicationControl()),
-                    e -> {}
-            );
+        EditContactCommand editContactCommand = new EditContactCommand(
+                selectedContact,
+                getModel(),
+                getApplicationControl()
+        );
+
+        run(editContactCommand)
+            .using(getApplicationControl().getCommandRunner())
+            .execute();
     }
 
     @FXML
@@ -155,17 +165,23 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
                 selectedContact,
                 getApplicationControl());
 
-        getApplicationControl().getCommandRunner().executeCommand(
-                command,
+        deletionIsInProgress.setValue(true);
+        run(command)
+            .using(getApplicationControl().getCommandRunner())
+            .onCompletion(
                 optionalRemovedContact -> optionalRemovedContact.ifPresent(removedContact -> {
                     Platform.runLater(() -> {
                         ContactList contactList = getModel();
                         contactList.removeContact(removedContact);
                         contactList.setModified(true);
+                        deletionIsInProgress.setValue(false);
                     });
-                }),
-                e -> {}
-        );
+                })
+            )
+            .onCommandException(
+                e -> deletionIsInProgress.setValue(false)
+            )
+            .execute();
     }
 
 }
