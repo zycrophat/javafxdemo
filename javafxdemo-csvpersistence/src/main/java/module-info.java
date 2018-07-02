@@ -1,5 +1,5 @@
-import steffan.javafxdemo.persistence.api.PersistenceContext;
-import steffan.javafxdemo.persistence.simplepersistence.SimplePersistenceContext;
+import steffan.javafxdemo.core.persistence.api.PersistenceContext;
+import steffan.javafxdemo.csvpersistence.simplepersistence.SimplePersistenceContext;
 
 module steffan.javafxdemo.csvpersistence {
     requires steffan.javafxdemo.core;

@@ -5,7 +5,7 @@ plugins {
 //project.sourceCompatibility = 1.10
 //project.targetCompatibility = 1.10
 
-mainClassName = 'steffan.javafxdemo.app.main.Main'
+mainClassName = 'steffan.javafxdemo.app.Main'
 
 dependencies {
     implementation 'com.google.guava:guava:23.0'
