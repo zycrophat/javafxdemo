@@ -2,7 +2,7 @@ import steffan.javafxdemo.view.api.UIViewManager;
 import steffan.javafxdemo.view.fximpl.base.FXUIViewManager;
 
 module steffan.javafxdemo.fxview {
-    requires steffan.javafxdemo.app;
+    requires steffan.javafxdemo.core;
     requires javafx.controls;
     requires javafx.fxml;
 

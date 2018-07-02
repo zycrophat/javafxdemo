@@ -1,4 +1,4 @@
-package steffan.javafxdemo.app.main;
+package steffan.javafxdemo.control;
 
 import java.util.Random;
 import java.util.concurrent.ThreadFactory;

@@ -2,9 +2,9 @@ plugins {
     id 'com.zyxist.chainsaw'  version '0.3.1' apply false
 }
 
-allprojects {
-    //import org.gradle.plugins.ide.idea.model.*
+apply plugin: 'idea'
 
+subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'com.zyxist.chainsaw'

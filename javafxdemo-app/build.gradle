@@ -8,13 +8,15 @@ plugins {
 mainClassName = 'steffan.javafxdemo.app.main.Main'
 
 dependencies {
-    compile 'com.google.guava:guava:23.0'
+    implementation 'com.google.guava:guava:23.0'
 
+    implementation project(':javafxdemo-core')
+    
     runtimeOnly project(':javafxdemo-fxview')
     runtimeOnly project(':javafxdemo-csvpersistence')
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.+'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.+'
 }
 
 javaModule.name = 'steffan.javafxdemo.app'

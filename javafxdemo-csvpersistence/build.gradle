@@ -1,8 +1,8 @@
 dependencies {
-    compile 'com.google.guava:guava:23.0'
-    compile project(':javafxdemo-app')
+    implementation 'com.google.guava:guava:23.0'
+    implementation project(':javafxdemo-core')
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 javaModule.name = 'steffan.javafxdemo.csvpersistence'

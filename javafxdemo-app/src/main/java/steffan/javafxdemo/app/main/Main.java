@@ -8,7 +8,10 @@ import java.util.ServiceLoader;
 public class Main {
 
     public static void main(String[] args) {
-        var app = new JavaFXAppControl(ServiceLoader.load(UIViewManager.class).findFirst().get(), ServiceLoader.load(PersistenceContext.class).findFirst().get());
+        var app = new JavaFXAppControl(
+                ServiceLoader.load(UIViewManager.class).findFirst().get(),
+                ServiceLoader.load(PersistenceContext.class).findFirst().get()
+        );
         app.initialize();
         app.start();
     }

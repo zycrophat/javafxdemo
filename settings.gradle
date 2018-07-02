@@ -10,5 +10,6 @@
 rootProject.name = 'javafxdemo'
 
 include 'javafxdemo-app'
+include 'javafxdemo-core'
 include 'javafxdemo-fxview'
 include 'javafxdemo-csvpersistence'

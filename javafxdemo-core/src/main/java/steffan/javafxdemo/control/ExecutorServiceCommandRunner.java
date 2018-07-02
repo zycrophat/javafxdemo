@@ -1,8 +1,7 @@
-package steffan.javafxdemo.app.main;
+package steffan.javafxdemo.control;
 
 import steffan.javafxdemo.commands.base.Command;
 import steffan.javafxdemo.commands.base.CommandException;
-import steffan.javafxdemo.control.CommandRunner;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -13,7 +12,7 @@ public class ExecutorServiceCommandRunner implements CommandRunner {
 
     private final ExecutorService executorService;
 
-    ExecutorServiceCommandRunner(ExecutorService executorService) {
+    public ExecutorServiceCommandRunner(ExecutorService executorService) {
         this.executorService = executorService;
     }
 
