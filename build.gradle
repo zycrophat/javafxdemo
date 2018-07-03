@@ -1,24 +1,49 @@
 plugins {
     id 'com.zyxist.chainsaw'  version '0.3.1' apply false
+    id 'cz.malohlava' version '1.0.3'
 }
 
-apply plugin: 'idea'
+allprojects {
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
+    apply plugin: 'java-library'
     apply plugin: 'com.zyxist.chainsaw'
     
     repositories {
         jcenter()
     }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        testImplementation 'org.mockito:mockito-core:2.+'
+    }
 }
 
 idea {
     project {
-       // jdkName = '10.0.1'
-        //languageLevel = 'JDK_10'
-
         vcs = 'Git'
     }
+}
+
+visteg {
+    enabled = true
+    colouredNodes  = true
+    colouredEdges = true
+    destination = 'build/reports/visteg.dot'
+    exporter = 'dot'
+    colorscheme = 'spectral11'
+    nodeShape = 'box'
+    startNodeShape = 'hexagon'
+    endNodeShape = 'doubleoctagon'
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
 }
