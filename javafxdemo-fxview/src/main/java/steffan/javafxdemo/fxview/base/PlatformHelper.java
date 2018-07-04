@@ -3,23 +3,20 @@ package steffan.javafxdemo.fxview.base;
 import javafx.application.Platform;
 import steffan.javafxdemo.core.view.api.UIViewException;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 
 class PlatformHelper {
 
     static void runLaterAndWait(Runnable runnable) {
-        Semaphore semaphore = new Semaphore(0);
+        CountDownLatch countDownLatch = new CountDownLatch(1);
 
         Platform.runLater(() -> {
             runnable.run();
-            semaphore.release();
+            countDownLatch.countDown();
         });
 
         try {
-            semaphore.acquire();
+            countDownLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
