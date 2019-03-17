@@ -9,8 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
         var app = new JavaFXAppControl(
-                ServiceLoader.load(UIViewManager.class).findFirst().get(),
-                ServiceLoader.load(PersistenceContext.class).findFirst().get()
+                ServiceLoader.load(UIViewManager.class).findFirst().orElseThrow(() -> new RuntimeException("Cannot load UIViewManager")),
+                ServiceLoader.load(PersistenceContext.class).findFirst().orElseThrow(() -> new RuntimeException("Cannot load PersistenceContext"))
         );
         app.initialize();
         app.start();
