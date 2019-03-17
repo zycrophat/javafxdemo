@@ -1,5 +1,5 @@
 dependencies {
-    api fileTree(javafxSdkLibPath) { include '*.jar' }
+    api 'javafx:javafx.base'
 }
 
 javaModule.name = 'steffan.javafxdemo.core'
