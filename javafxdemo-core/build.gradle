@@ -1,3 +1,7 @@
+dependencies {
+    api fileTree(javafxSdkLibPath) { include '*.jar' }
+}
+
 javaModule.name = 'steffan.javafxdemo.core'
 
 javaModule.extraTestModules = ['junit', 'hamcrest.core', 'org.mockito']

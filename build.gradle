@@ -1,6 +1,5 @@
 plugins {
     id 'com.zyxist.chainsaw'  version '0.3.1' apply false
-    id 'cz.malohlava' version '1.0.3'
 }
 
 allprojects {
@@ -30,18 +29,6 @@ idea {
     project {
         vcs = 'Git'
     }
-}
-
-visteg {
-    enabled = true
-    colouredNodes  = true
-    colouredEdges = true
-    destination = 'build/reports/visteg.dot'
-    exporter = 'dot'
-    colorscheme = 'spectral11'
-    nodeShape = 'box'
-    startNodeShape = 'hexagon'
-    endNodeShape = 'doubleoctagon'
 }
 
 wrapper {

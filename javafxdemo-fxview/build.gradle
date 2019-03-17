@@ -1,5 +1,7 @@
 dependencies {
     api project(':javafxdemo-core')
+
+    api fileTree(javafxSdkLibPath) { include '*.jar' }
 }
 
 javaModule.name = 'steffan.javafxdemo.fxview'
