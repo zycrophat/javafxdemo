@@ -1,7 +1,3 @@
 dependencies {
     api project(':javafxdemo-core')
 }
-
-javaModule.name = 'steffan.javafxdemo.csvpersistence'
-
-javaModule.extraTestModules = ['hamcrest.core']

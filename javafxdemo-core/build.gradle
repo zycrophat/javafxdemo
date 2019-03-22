@@ -1,7 +1,3 @@
 dependencies {
     api 'javafx:javafx.base'
 }
-
-javaModule.name = 'steffan.javafxdemo.core'
-
-javaModule.extraTestModules = ['junit', 'hamcrest.core', 'org.mockito']

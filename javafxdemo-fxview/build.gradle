@@ -5,7 +5,3 @@ dependencies {
     api 'javafx:javafx.fxml'
     implementation 'javafx:javafx.graphics'
 }
-
-javaModule.name = 'steffan.javafxdemo.fxview'
-
-javaModule.extraTestModules = ['hamcrest.core']
