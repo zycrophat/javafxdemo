@@ -1,5 +1,7 @@
 plugins {
     id 'application'
+    id 'org.openjfx.javafxplugin'
+    id 'org.beryx.jlink'
 }
 
 mainClassName = 'steffan.javafxdemo.app/steffan.javafxdemo.app.Main'
@@ -11,11 +13,7 @@ dependencies {
     runtimeOnly project(':javafxdemo-csvpersistence')
 }
 
-tasks.compileJava.dependsOn(':javafxdemo-core:compileJava')
-
-distZip {
-    into("${project.name}") {
-        from 'javaFxRuntimes/win_x64'
-        include 'bin/*'
-    }
+javafx {
+    version = rootProject.javaFxVersion
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }

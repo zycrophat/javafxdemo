@@ -1,7 +1,15 @@
+plugins {
+    id 'org.openjfx.javafxplugin'
+    id 'org.beryx.jlink'
+}
+
 dependencies {
     api project(':javafxdemo-core')
+}
 
-    api 'javafx:javafx.controls'
-    api 'javafx:javafx.fxml'
-    implementation 'javafx:javafx.graphics'
+mainClassName = "steffan.javafxdemo.fxview/steffan.javafxdemo.fxview.NoMainClass"
+
+javafx {
+    version = rootProject.javaFxVersion
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics' ]
 }

@@ -1,3 +1,11 @@
-dependencies {
-    api 'javafx:javafx.base'
+plugins {
+    id 'org.openjfx.javafxplugin'
+    id 'org.beryx.jlink'
+}
+
+mainClassName = "steffan.javafxdemo.core/steffan.javafxdemo.core.NoMainClass"
+
+javafx {
+    version = rootProject.javaFxVersion
+    modules = [ 'javafx.base' ]
 }

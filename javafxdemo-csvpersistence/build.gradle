@@ -1,3 +1,15 @@
+plugins {
+    id 'org.openjfx.javafxplugin'
+    id 'org.beryx.jlink'
+}
+
 dependencies {
     api project(':javafxdemo-core')
+}
+
+mainClassName = "steffan.javafxdemo.csvpersistence/steffan.javafxdemo.csvpersistence.NoMainClass"
+
+javafx {
+    version = rootProject.javaFxVersion
+    modules = [ 'javafx.base' ]
 }
