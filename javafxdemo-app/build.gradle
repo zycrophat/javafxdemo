@@ -17,3 +17,11 @@ javafx {
     version = rootProject.javaFxVersion
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
+
+distributions {
+    main {
+        contents {
+            from "${rootProject.projectDir}/LICENSE"
+        }
+    }
+}
