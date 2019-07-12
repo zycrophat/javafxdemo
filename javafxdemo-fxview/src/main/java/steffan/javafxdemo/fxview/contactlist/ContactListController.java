@@ -20,6 +20,7 @@ import steffan.javafxdemo.fxview.base.JavaFXSceneController;
 import steffan.javafxdemo.fxview.base.ObserveAndEditListCell;
 
 import static steffan.javafxdemo.core.control.CommandRunHelper.run;
+import static steffan.javafxdemo.fxview.util.NodeDisablePropertyConfigurer.disable;
 
 
 public class ContactListController extends JavaFXSceneController<ContactList> {
@@ -52,10 +53,7 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @Override
     protected void initialize(ContactList model) {
-        saveButton.disableProperty().bind(model.modifiedProperty().not());
-        BooleanBinding noContactIsSelectedBinding = contactsListView.getSelectionModel().selectedItemProperty().isNull();
-        editButton.disableProperty().bind(noContactIsSelectedBinding);
-        deleteButton.disableProperty().bind(noContactIsSelectedBinding.or(deletionIsInProgress));
+        configureButtons(model);
 
         contactsListView.setCellFactory(
                 listView -> new ObserveAndEditListCell<>(
@@ -67,6 +65,20 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         contactsListView.setEditable(true);
         contactsListView.setItems(model.getContacts());
     }
+
+    private void configureButtons(ContactList model) {
+        disable(saveButton).when(modelIsNotModified());
+        disable(editButton).and(deleteButton).when(noContactIsSelected().or(deletionIsInProgress));
+    }
+
+    private BooleanBinding noContactIsSelected() {
+        return contactsListView.getSelectionModel().selectedItemProperty().isNull();
+    }
+
+    private BooleanBinding modelIsNotModified() {
+        return getModel().modifiedProperty().not();
+    }
+
 
     private Contact updateContact(Contact contact, String text) {
         var names = text.split(" ", 2);
