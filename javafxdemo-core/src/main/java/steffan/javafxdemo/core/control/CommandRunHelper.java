@@ -48,6 +48,7 @@ public class CommandRunHelper<T> {
 
     public Future<Optional<T>> execute() {
         Objects.requireNonNull(command, "Cannot execute (no CommandRunner)");
+        Objects.requireNonNull(commandRunner, "commandRunner must not be null");
         return commandRunner.executeCommand(command, completionHandler, onCommandException);
     }
 }
