@@ -8,6 +8,8 @@ public interface PersistenceContext {
 
     <T extends DomainObject> Repository<T> getRepository(Class<T> clazz) throws PersistenceException;
 
+    <T> T doInTransaction(TransactionCallable<T> transactionCallable) throws PersistenceException;
+
     void doInTransaction(TransactionScript transactionScript) throws PersistenceException;
 
     UnitOfWork getOrCreateCurrentUnitOfWork();

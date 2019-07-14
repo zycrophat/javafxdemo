@@ -17,11 +17,6 @@ public class ExecutorServiceCommandRunner implements CommandRunner {
     }
 
     @Override
-    public <T> Future<Optional<T>> executeCommand(Command<T> command, Consumer<CommandException> onCommandException) {
-        return executeCommand(command, r -> {}, onCommandException);
-    }
-
-    @Override
     public <T> Future<Optional<T>> executeCommand(Command<T> command, Consumer<Optional<T>> onCompletion, Consumer<CommandException> onCommandException) {
         return executorService.submit(() -> {
             try {

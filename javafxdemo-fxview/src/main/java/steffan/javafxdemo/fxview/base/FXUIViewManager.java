@@ -12,6 +12,7 @@ import steffan.javafxdemo.core.view.api.UIForm;
 import steffan.javafxdemo.core.view.api.UIView;
 import steffan.javafxdemo.core.view.api.UIViewException;
 import steffan.javafxdemo.core.view.api.UIViewManager;
+import steffan.javafxdemo.fxview.util.PlatformHelper;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +28,7 @@ public class FXUIViewManager implements UIViewManager {
     private Stage primaryStage;
 
     @Override
-    public void initialize(ApplicationControl applicationControl) throws UIViewException {
+    public void initialize(ApplicationControl applicationControl) {
         this.applicationControl = applicationControl;
         JavaFXApplication.initialize(this);
     }

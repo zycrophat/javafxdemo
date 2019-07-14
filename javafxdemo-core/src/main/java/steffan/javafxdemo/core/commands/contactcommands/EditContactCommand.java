@@ -5,21 +5,19 @@ import steffan.javafxdemo.core.commands.base.CommandException;
 import steffan.javafxdemo.core.control.ApplicationControl;
 import steffan.javafxdemo.core.models.domainmodel.Contact;
 import steffan.javafxdemo.core.models.domainmodel.ContactDTO;
-import steffan.javafxdemo.core.models.viewmodel.ContactList;
 import steffan.javafxdemo.core.view.api.UIForm;
 import steffan.javafxdemo.core.view.api.UIViewException;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EditContactCommand implements Command<Contact> {
 
     private final Contact contact;
     private final ApplicationControl applicationControl;
-    private final ContactList contactList;
 
-    public EditContactCommand(Contact contact, ContactList contactList, ApplicationControl applicationControl) {
+    public EditContactCommand(Contact contact, ApplicationControl applicationControl) {
         this.contact = contact;
-        this.contactList = contactList;
         this.applicationControl = applicationControl;
     }
 
@@ -34,15 +32,16 @@ public class EditContactCommand implements Command<Contact> {
             UIForm<ContactDTO> createContactUIForm =
                     applicationControl.getUiViewManager().createContactUIForm(contactDTO, "Edit Contact");
 
+            AtomicReference<Contact> editedContact = new AtomicReference<>();
             createContactUIForm.setOnSubmit(c -> {
 
                 contact.setFirstName(c.getFirstName());
                 contact.setLastName(c.getLastName());
 
-                contactList.setModified(true);
-                applicationControl.getPersistenceContext().withUnitOfWork(unitOfWork -> {
-                    unitOfWork.markAsModified(contact);
-                });
+                editedContact.set(contact);
+                applicationControl.getPersistenceContext().withUnitOfWork(
+                        unitOfWork -> unitOfWork.markAsModified(contact)
+                );
 
                 createContactUIForm.hide();
             });
@@ -50,7 +49,7 @@ public class EditContactCommand implements Command<Contact> {
             createContactUIForm.setOnCancel(c -> createContactUIForm.hide());
 
             createContactUIForm.showAndWait();
-            return Optional.of(contact);
+            return Optional.ofNullable(editedContact.get());
         } catch (UIViewException e) {
            throw new CommandException(e);
         }

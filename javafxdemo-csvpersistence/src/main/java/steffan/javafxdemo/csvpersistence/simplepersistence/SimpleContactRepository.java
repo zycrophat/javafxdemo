@@ -65,13 +65,17 @@ public class SimpleContactRepository implements Repository<Contact> {
     }
 
     private Contact mapLineToContact(String line) {
-        String[] contactAttributes = line.split(",");
+        String[] contactAttributes = line.split(",", 3);
 
-        long key = Long.parseLong(contactAttributes[0]);
-        String firstName = contactAttributes[1];
-        String lastName = contactAttributes[2];
+        long key = getOptionalField(contactAttributes, 0).map(Long::parseLong).orElse(-1L);
+        String firstName = getOptionalField(contactAttributes, 1).orElse("");
+        String lastName = getOptionalField(contactAttributes, 2).orElse("");
 
         return new Contact(key, firstName, lastName);
+    }
+
+    private <T> Optional<T> getOptionalField(T[] contactAttributes, int i) {
+        return contactAttributes.length > i ? Optional.of(contactAttributes[i]) : Optional.empty();
     }
 
     @Override
@@ -102,7 +106,7 @@ public class SimpleContactRepository implements Repository<Contact> {
     }
 
     private long generateId(Map<Long, Contact> contactMap) {
-        return contactMap.keySet().stream().max(Long::compareTo).orElse(1L) + 1L;
+        return contactMap.keySet().stream().max(Long::compareTo).map(id -> id + 1L).orElse(1L);
     }
 
     private boolean isNewContact(Contact contact) {

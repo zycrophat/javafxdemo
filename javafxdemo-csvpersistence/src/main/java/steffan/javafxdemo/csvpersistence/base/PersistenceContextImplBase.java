@@ -51,6 +51,6 @@ public abstract class PersistenceContextImplBase implements PersistenceContext {
 
     @Override
     public void withUnitOfWorkInTransaction(UnitOfWorkTxRunnable unitOfWorkTxRunnable) throws PersistenceException {
-        doInTransaction(ctx -> unitOfWorkTxRunnable.run(ctx, getOrCreateCurrentUnitOfWork()));
+        doInTransaction(ctx -> { unitOfWorkTxRunnable.run(ctx, getOrCreateCurrentUnitOfWork()); });
     }
 }

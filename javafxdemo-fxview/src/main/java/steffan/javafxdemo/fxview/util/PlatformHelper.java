@@ -1,13 +1,19 @@
-package steffan.javafxdemo.fxview.base;
+package steffan.javafxdemo.fxview.util;
 
 import javafx.application.Platform;
+import steffan.javafxdemo.core.control.CommandRunner;
 import steffan.javafxdemo.core.view.api.UIViewException;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 
-class PlatformHelper {
+public class PlatformHelper {
 
-    static void runLaterAndWait(Runnable runnable) {
+    private static CommandRunner platformCommandRunner = new PlatformCommandRunner();
+
+    public static void runLaterAndWait(Runnable runnable) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
         Platform.runLater(() -> {
@@ -22,7 +28,7 @@ class PlatformHelper {
         }
     }
 
-    static <T> T callLater(Callable<T> callable) throws UIViewException {
+    public static <T> T callLater(Callable<T> callable) throws UIViewException {
         CompletableFuture<T> future = new CompletableFuture<>();
 
         Platform.runLater(() -> {
@@ -39,5 +45,9 @@ class PlatformHelper {
         } catch (InterruptedException | ExecutionException e) {
             throw new UIViewException(e);
         }
+    }
+
+    public static CommandRunner getPlatformCommandRunner() {
+        return platformCommandRunner;
     }
 }

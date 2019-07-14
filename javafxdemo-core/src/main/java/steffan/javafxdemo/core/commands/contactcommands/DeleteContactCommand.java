@@ -18,9 +18,12 @@ public class DeleteContactCommand implements Command<Contact> {
 
     @Override
     public Optional<Contact> run() {
-        applicationControl.getPersistenceContext().withUnitOfWork(unitOfWork -> {
-            unitOfWork.markAsDeleted(contact);
-        });
+        applicationControl.getPersistenceContext().withUnitOfWork(unitOfWork -> unitOfWork.markAsDeleted(contact));
+        try {
+            Thread.sleep(2500L); // artificially slowing down operation for GUI demonstration purposes
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return Optional.of(contact);
     }
 }

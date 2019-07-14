@@ -9,18 +9,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import steffan.javafxdemo.core.commands.contactcommands.ChangeContactNameCommand;
-import steffan.javafxdemo.core.commands.contactcommands.CreateContactCommand;
-import steffan.javafxdemo.core.commands.contactcommands.DeleteContactCommand;
-import steffan.javafxdemo.core.commands.contactcommands.EditContactCommand;
+import javafx.scene.control.ProgressIndicator;
+import steffan.javafxdemo.core.commands.contactcommands.*;
 import steffan.javafxdemo.core.models.domainmodel.Contact;
 import steffan.javafxdemo.core.models.viewmodel.ContactList;
-import steffan.javafxdemo.core.persistence.api.PersistenceException;
 import steffan.javafxdemo.fxview.base.JavaFXSceneController;
 import steffan.javafxdemo.fxview.base.ObserveAndEditListCell;
+import steffan.javafxdemo.fxview.util.PlatformHelper;
 
 import static steffan.javafxdemo.core.control.CommandRunHelper.run;
-import static steffan.javafxdemo.fxview.util.NodeDisablePropertyConfigurer.disable;
+import static steffan.javafxdemo.fxview.util.FluentNodeConfigurer.disable;
+import static steffan.javafxdemo.fxview.util.FluentNodeConfigurer.show;
 
 
 public class ContactListController extends JavaFXSceneController<ContactList> {
@@ -36,6 +35,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private Button deleteButton;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private BooleanProperty deletionIsInProgress = new SimpleBooleanProperty(false);
 
@@ -67,8 +69,9 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     }
 
     private void configureButtons(ContactList model) {
-        disable(saveButton).when(modelIsNotModified());
+        disable(saveButton).when(modelIsNotModified().or(deletionIsInProgress));
         disable(editButton).and(deleteButton).when(noContactIsSelected().or(deletionIsInProgress));
+        show(progressIndicator).when(deletionIsInProgress);
     }
 
     private BooleanBinding noContactIsSelected() {
@@ -108,34 +111,39 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
 
     @FXML
     private void saveContactList() {
-        try {
-            getApplicationControl().getPersistenceContext().withUnitOfWorkInTransaction((ctx, unitOfWork) -> {
-                unitOfWork.commit(ctx);
-                getModel().setModified(false);
-            });
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Speichern");
-            alert.setContentText("Es ist ein Fehler beim Speichern aufgetreten");
-        }
+        CommitUnitOfWorkCommand command = new CommitUnitOfWorkCommand(getApplicationControl());
+        run(command)
+                .using(PlatformHelper.getPlatformCommandRunner())
+                .onCompletion(o -> getModel().setModified(false))
+                .onCommandException(e -> {
+                    e.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Fehler beim Speichern");
+                    alert.setContentText("Es ist ein Fehler beim Speichern aufgetreten");
+                })
+                .execute();
     }
 
     @FXML
     private void loadContactList() {
-        try {
-            getApplicationControl().getPersistenceContext().doInTransaction(ctx -> {
-                var contacts = ctx.getRepository(Contact.class).find();
-
-                getModel().getContacts().setAll(contacts);
-                getModel().setModified(false);
-            });
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Laden");
-            alert.setContentText("Es ist ein Fehler beim Laden aufgetreten");
-        }
+        LoadContactsCommand command = new LoadContactsCommand(getApplicationControl());
+        run(command)
+                .using(getApplicationControl().getCommandRunner())
+                .onCompletion(optionalContacts ->
+                        Platform.runLater(() -> {
+                            getModel().getContacts().setAll(optionalContacts.orElseThrow());
+                            getModel().setModified(false);
+                        })
+                )
+                .onCommandException(e -> {
+                    e.printStackTrace();
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Fehler beim Laden");
+                        alert.setContentText("Es ist ein Fehler beim Laden aufgetreten");
+                    });
+                })
+                .execute();
     }
 
     @FXML
@@ -162,12 +170,16 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
         Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
         EditContactCommand editContactCommand = new EditContactCommand(
                 selectedContact,
-                getModel(),
                 getApplicationControl()
         );
 
         run(editContactCommand)
             .using(getApplicationControl().getCommandRunner())
+                .onCompletion(optionallyEditedContact -> {
+                    if (optionallyEditedContact.isPresent()) {
+                        Platform.runLater(() -> getModel().setModified(true));
+                    }
+                })
             .execute();
     }
 

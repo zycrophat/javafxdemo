@@ -2,6 +2,7 @@ package steffan.javafxdemo.fxview.base;
 
 import javafx.stage.Stage;
 import steffan.javafxdemo.core.view.api.UIForm;
+import steffan.javafxdemo.fxview.util.PlatformHelper;
 
 import java.util.function.Consumer;
 

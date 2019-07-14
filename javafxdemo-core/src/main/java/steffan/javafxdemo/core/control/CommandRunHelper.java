@@ -12,7 +12,7 @@ public class CommandRunHelper<T> {
 
     private CommandRunner commandRunner;
     private Command<T> command;
-    private Consumer<Optional<T>> completionHandler = o-> {};
+    private Consumer<Optional<T>> completionHandler = o -> {};
     private Consumer<CommandException> onCommandException = e -> {};
 
     private CommandRunHelper(){

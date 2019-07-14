@@ -29,7 +29,7 @@ public class JavaFXAppControl implements ApplicationControl {
     JavaFXAppControl(UIViewManager uiViewManager, PersistenceContext persistenceContext) {
         this.uiViewManager = requireNonNull(uiViewManager, "uiViewManager is null");
         this.persistenceContext = requireNonNull(persistenceContext, "persistenceContext required");
-        ExecutorService executorService = Executors.newSingleThreadExecutor(
+        ExecutorService executorService = Executors.newCachedThreadPool(
                 new DaemonizingThreadFactory(Executors.defaultThreadFactory())
         );
         executorServiceCommandRunner = new ExecutorServiceCommandRunner(executorService);
