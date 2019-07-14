@@ -1,8 +1,7 @@
 package steffan.javafxdemo.core.models.viewmodel;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import steffan.javafxdemo.core.models.domainmodel.Contact;
@@ -13,7 +12,7 @@ public class ContactList {
 
     private ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
-    private BooleanProperty modified = new SimpleBooleanProperty(false);
+    private ReadOnlyBooleanWrapper modified = new ReadOnlyBooleanWrapper(false);
 
     public ContactList(List<Contact> contactList) {
         contacts.setAll(contactList);
@@ -30,7 +29,7 @@ public class ContactList {
     }
 
     public ReadOnlyBooleanProperty modifiedProperty() {
-        return modified;
+        return modified.getReadOnlyProperty();
     }
 
     public boolean isModified() {

@@ -1,14 +1,13 @@
 package steffan.javafxdemo.app;
 
 
+import steffan.javafxdemo.core.commands.contactcommands.LoadContactsCommand;
 import steffan.javafxdemo.core.control.ApplicationControl;
 import steffan.javafxdemo.core.control.CommandRunner;
 import steffan.javafxdemo.core.control.DaemonizingThreadFactory;
 import steffan.javafxdemo.core.control.ExecutorServiceCommandRunner;
-import steffan.javafxdemo.core.models.domainmodel.Contact;
 import steffan.javafxdemo.core.models.viewmodel.ContactList;
 import steffan.javafxdemo.core.persistence.api.PersistenceContext;
-import steffan.javafxdemo.core.persistence.api.PersistenceException;
 import steffan.javafxdemo.core.view.api.UIViewException;
 import steffan.javafxdemo.core.view.api.UIViewManager;
 
@@ -16,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static java.util.Objects.requireNonNull;
+import static steffan.javafxdemo.core.control.CommandRunHelper.run;
 
 
 public class JavaFXAppControl implements ApplicationControl {
@@ -52,18 +52,22 @@ public class JavaFXAppControl implements ApplicationControl {
             throw new IllegalStateException("App not initialized");
         }
 
-        try {
-            var contactsView = uiViewManager.createContactsUIView();
+        LoadContactsCommand command = new LoadContactsCommand(this);
+        run(command)
+                .using(getCommandRunner())
+                .onCompletion(optionalContacts -> {
+                    try {
+                        var contactsView = uiViewManager.createContactsUIView();
+                        ContactList contactList = new ContactList(optionalContacts.orElseThrow());
 
-            var contacts = persistenceContext.getRepository(Contact.class).find();
-            ContactList contactList = new ContactList(contacts);
-
-            contactsView.setModel(contactList);
-            contactsView.show();
-        } catch (UIViewException | PersistenceException e) {
-            e.printStackTrace();
-            System.exit(666);
-        }
+                        contactsView.setModel(contactList);
+                        contactsView.show();
+                    } catch (UIViewException e) {
+                        e.printStackTrace();
+                        System.exit(666);
+                    }
+                })
+                .execute();
     }
 
     @Override

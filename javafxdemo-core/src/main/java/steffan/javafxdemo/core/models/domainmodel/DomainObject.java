@@ -1,13 +1,13 @@
 package steffan.javafxdemo.core.models.domainmodel;
 
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.ReadOnlyLongProperty;
+import javafx.beans.property.ReadOnlyLongWrapper;
 
 import java.util.Objects;
 
 public class DomainObject {
 
-    private LongProperty id = new SimpleLongProperty();
+    private ReadOnlyLongWrapper id = new ReadOnlyLongWrapper();
 
     public DomainObject(long id) {
         this.id.setValue(id);
@@ -17,8 +17,8 @@ public class DomainObject {
         return id.get();
     }
 
-    public LongProperty idProperty() {
-        return id;
+    public ReadOnlyLongProperty idProperty() {
+        return id.getReadOnlyProperty();
     }
 
     public void setId(long id) {

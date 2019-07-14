@@ -6,8 +6,10 @@ import steffan.javafxdemo.core.control.ApplicationControl;
 import steffan.javafxdemo.core.models.domainmodel.Contact;
 import steffan.javafxdemo.core.persistence.api.PersistenceException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class LoadContactsCommand implements Command<List<Contact>> {
 
@@ -21,7 +23,10 @@ public class LoadContactsCommand implements Command<List<Contact>> {
     public Optional<List<Contact>> run() throws CommandException {
         try {
             return applicationControl.getPersistenceContext().doInTransaction(ctx -> {
-                var contacts = ctx.getRepository(Contact.class).find();
+                var contacts = ctx.getRepository(Contact.class).find()
+                        .stream()
+                        .sorted(Comparator.comparing(Contact::getId))
+                        .collect(Collectors.toList());
                 return Optional.of(contacts);
             });
         } catch (PersistenceException e) {

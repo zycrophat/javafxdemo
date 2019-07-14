@@ -1,15 +1,15 @@
 package steffan.javafxdemo.core.models.domainmodel;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.util.Objects;
 
 public class Contact extends DomainObject {
 
-    private StringProperty firstName = new SimpleStringProperty();
+    private ReadOnlyStringWrapper firstName = new ReadOnlyStringWrapper();
 
-    private StringProperty lastName = new SimpleStringProperty();
+    private ReadOnlyStringWrapper lastName = new ReadOnlyStringWrapper();
 
     public Contact() {
         super(-1);
@@ -31,8 +31,8 @@ public class Contact extends DomainObject {
         return firstName.get();
     }
 
-    public StringProperty firstNameProperty() {
-        return firstName;
+    public ReadOnlyStringProperty firstNameProperty() {
+        return firstName.getReadOnlyProperty();
     }
 
     public void setFirstName(String firstName) {
@@ -43,8 +43,8 @@ public class Contact extends DomainObject {
         return lastName.get();
     }
 
-    public StringProperty lastNameProperty() {
-        return lastName;
+    public ReadOnlyStringProperty lastNameProperty() {
+        return lastName.getReadOnlyProperty();
     }
 
     public void setLastName(String lastName) {
