@@ -1,7 +1,6 @@
-package steffan.javafxdemo.fxview.util;
+package steffan.javafxdemo.core.control;
 
 import javafx.application.Platform;
-import steffan.javafxdemo.core.control.CommandRunner;
 import steffan.javafxdemo.core.view.api.UIViewException;
 
 import java.util.concurrent.Callable;
@@ -11,12 +10,10 @@ import java.util.concurrent.ExecutionException;
 
 public class PlatformHelper {
 
-    private static CommandRunner platformCommandRunner = new PlatformCommandRunner();
-
-    public static void runLaterAndWait(Runnable runnable) {
+    public static void runLaterOrOnPlatformThreadAndWait(Runnable runnable) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        Platform.runLater(() -> {
+        runLaterOrOnPlatformThread(() -> {
             runnable.run();
             countDownLatch.countDown();
         });
@@ -28,10 +25,18 @@ public class PlatformHelper {
         }
     }
 
+    public static void runLaterOrOnPlatformThread(Runnable runnable) {
+        if (!Platform.isFxApplicationThread()) {
+            Platform.runLater(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
     public static <T> T callLater(Callable<T> callable) throws UIViewException {
         CompletableFuture<T> future = new CompletableFuture<>();
 
-        Platform.runLater(() -> {
+        runLaterOrOnPlatformThread(() -> {
             try {
                 T result = callable.call();
                 future.complete(result);
@@ -45,9 +50,5 @@ public class PlatformHelper {
         } catch (InterruptedException | ExecutionException e) {
             throw new UIViewException(e);
         }
-    }
-
-    public static CommandRunner getPlatformCommandRunner() {
-        return platformCommandRunner;
     }
 }

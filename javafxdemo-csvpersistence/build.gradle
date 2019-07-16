@@ -11,5 +11,5 @@ mainClassName = "steffan.javafxdemo.csvpersistence/steffan.javafxdemo.csvpersist
 
 javafx {
     version = rootProject.javaFxVersion
-    modules = [ 'javafx.base' ]
+    modules = [ 'javafx.base', 'javafx.controls' ]
 }

@@ -7,5 +7,5 @@ mainClassName = "steffan.javafxdemo.core/steffan.javafxdemo.core.NoMainClass"
 
 javafx {
     version = rootProject.javaFxVersion
-    modules = [ 'javafx.base' ]
+    modules = [ 'javafx.base', 'javafx.controls' ]
 }

@@ -5,6 +5,8 @@ import javafx.beans.property.ReadOnlyLongWrapper;
 
 import java.util.Objects;
 
+import static steffan.javafxdemo.core.models.domainmodel.SetterHelper.set;
+
 public class DomainObject {
 
     private ReadOnlyLongWrapper id = new ReadOnlyLongWrapper();
@@ -22,7 +24,7 @@ public class DomainObject {
     }
 
     public void setId(long id) {
-        this.id.set(id);
+        set(this.id, id);
     }
 
     @Override

@@ -15,7 +15,6 @@ import steffan.javafxdemo.core.models.domainmodel.Contact;
 import steffan.javafxdemo.core.models.viewmodel.ContactList;
 import steffan.javafxdemo.fxview.base.JavaFXSceneController;
 import steffan.javafxdemo.fxview.base.ObserveAndEditListCell;
-import steffan.javafxdemo.fxview.util.PlatformHelper;
 
 import static steffan.javafxdemo.core.control.CommandRunHelper.run;
 import static steffan.javafxdemo.fxview.util.FluentNodeConfigurer.disable;
@@ -113,14 +112,14 @@ public class ContactListController extends JavaFXSceneController<ContactList> {
     private void saveContactList() {
         CommitUnitOfWorkCommand command = new CommitUnitOfWorkCommand(getApplicationControl());
         run(command)
-                .using(PlatformHelper.getPlatformCommandRunner())
-                .onCompletion(o -> getModel().setModified(false))
-                .onCommandException(e -> {
+                .using(getApplicationControl().getCommandRunner())
+                .onCompletion(o -> Platform.runLater(() -> getModel().setModified(false)))
+                .onCommandException(e -> Platform.runLater(() -> {
                     e.printStackTrace();
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Fehler beim Speichern");
                     alert.setContentText("Es ist ein Fehler beim Speichern aufgetreten");
-                })
+                }))
                 .execute();
     }
 

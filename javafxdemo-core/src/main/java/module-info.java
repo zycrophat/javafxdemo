@@ -1,6 +1,7 @@
 module steffan.javafxdemo.core {
 
     requires transitive javafx.base;
+    requires transitive javafx.controls;
 
     exports steffan.javafxdemo.core.view.api;
     exports steffan.javafxdemo.core.models.domainmodel;

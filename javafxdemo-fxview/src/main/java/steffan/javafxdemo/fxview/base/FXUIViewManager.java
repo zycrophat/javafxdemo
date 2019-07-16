@@ -12,7 +12,7 @@ import steffan.javafxdemo.core.view.api.UIForm;
 import steffan.javafxdemo.core.view.api.UIView;
 import steffan.javafxdemo.core.view.api.UIViewException;
 import steffan.javafxdemo.core.view.api.UIViewManager;
-import steffan.javafxdemo.fxview.util.PlatformHelper;
+import steffan.javafxdemo.core.control.PlatformHelper;
 
 import java.io.IOException;
 import java.net.URL;

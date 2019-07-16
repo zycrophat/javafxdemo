@@ -4,6 +4,9 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.util.Objects;
+import java.util.Set;
+
+import static steffan.javafxdemo.core.models.domainmodel.SetterHelper.set;
 
 public class Contact extends DomainObject {
 
@@ -36,7 +39,7 @@ public class Contact extends DomainObject {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName.set(firstName);
+        set(this.firstName, firstName);
     }
 
     public String getLastName() {
@@ -48,7 +51,7 @@ public class Contact extends DomainObject {
     }
 
     public void setLastName(String lastName) {
-        this.lastName.set(lastName);
+        set(this.lastName, lastName);
     }
 
     @Override
