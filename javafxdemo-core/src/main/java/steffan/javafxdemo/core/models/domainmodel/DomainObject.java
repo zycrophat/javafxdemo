@@ -5,11 +5,11 @@ import javafx.beans.property.ReadOnlyLongWrapper;
 
 import java.util.Objects;
 
-import static steffan.javafxdemo.core.models.domainmodel.SetterHelper.set;
+import static steffan.javafxdemo.core.models.util.WritableValueHelper.writableValueWithSetInPlatformThread;
 
 public class DomainObject {
 
-    private ReadOnlyLongWrapper id = new ReadOnlyLongWrapper();
+    private ReadOnlyLongWrapper id = writableValueWithSetInPlatformThread(new ReadOnlyLongWrapper());
 
     public DomainObject(long id) {
         this.id.setValue(id);
@@ -24,7 +24,7 @@ public class DomainObject {
     }
 
     public void setId(long id) {
-        set(this.id, id);
+        this.id.setValue(id);
     }
 
     @Override

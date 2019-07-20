@@ -5,6 +5,10 @@ plugins {
 
 mainClassName = "steffan.javafxdemo.core/steffan.javafxdemo.core.NoMainClass"
 
+dependencies {
+    api('net.bytebuddy:byte-buddy:1.9.14')
+}
+
 javafx {
     version = rootProject.javaFxVersion
     modules = [ 'javafx.base', 'javafx.controls' ]

@@ -1,7 +1,9 @@
-module steffan.javafxdemo.core {
+open module steffan.javafxdemo.core {
 
     requires transitive javafx.base;
     requires transitive javafx.controls;
+    requires transitive net.bytebuddy;
+    requires transitive java.instrument;
 
     exports steffan.javafxdemo.core.view.api;
     exports steffan.javafxdemo.core.models.domainmodel;

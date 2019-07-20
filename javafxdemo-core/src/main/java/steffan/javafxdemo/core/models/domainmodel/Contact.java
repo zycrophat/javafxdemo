@@ -4,15 +4,14 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.util.Objects;
-import java.util.Set;
 
-import static steffan.javafxdemo.core.models.domainmodel.SetterHelper.set;
+import static steffan.javafxdemo.core.models.util.WritableValueHelper.writableValueWithSetInPlatformThread;
 
 public class Contact extends DomainObject {
 
-    private ReadOnlyStringWrapper firstName = new ReadOnlyStringWrapper();
+    private ReadOnlyStringWrapper firstName = writableValueWithSetInPlatformThread(new ReadOnlyStringWrapper());
 
-    private ReadOnlyStringWrapper lastName = new ReadOnlyStringWrapper();
+    private ReadOnlyStringWrapper lastName = writableValueWithSetInPlatformThread(new ReadOnlyStringWrapper());
 
     public Contact() {
         super(-1);
@@ -39,7 +38,7 @@ public class Contact extends DomainObject {
     }
 
     public void setFirstName(String firstName) {
-        set(this.firstName, firstName);
+        this.firstName.setValue(firstName);
     }
 
     public String getLastName() {
@@ -51,7 +50,7 @@ public class Contact extends DomainObject {
     }
 
     public void setLastName(String lastName) {
-        set(this.lastName, lastName);
+        this.lastName.setValue(lastName);
     }
 
     @Override

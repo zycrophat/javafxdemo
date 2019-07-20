@@ -8,11 +8,13 @@ import steffan.javafxdemo.core.models.domainmodel.Contact;
 
 import java.util.List;
 
+import static steffan.javafxdemo.core.models.util.WritableValueHelper.writableValueWithSetInPlatformThread;
+
 public class ContactList {
 
     private ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
-    private ReadOnlyBooleanWrapper modified = new ReadOnlyBooleanWrapper(false);
+    private ReadOnlyBooleanWrapper modified = writableValueWithSetInPlatformThread(new ReadOnlyBooleanWrapper(false));
 
     public ContactList(List<Contact> contactList) {
         contacts.setAll(contactList);

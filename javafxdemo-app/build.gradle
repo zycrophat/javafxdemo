@@ -7,7 +7,7 @@ plugins {
 mainClassName = 'steffan.javafxdemo.app/steffan.javafxdemo.app.Main'
 
 dependencies {
-    api project(':javafxdemo-core')
+    implementation project(':javafxdemo-core')
     
     runtimeOnly project(':javafxdemo-fxview')
     runtimeOnly project(':javafxdemo-csvpersistence')
