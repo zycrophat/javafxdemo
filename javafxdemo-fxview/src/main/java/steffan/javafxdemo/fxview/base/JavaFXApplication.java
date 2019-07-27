@@ -2,6 +2,7 @@ package steffan.javafxdemo.fxview.base;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import steffan.javafxdemo.core.models.domainmodel.ProxyProvider;
 
 import java.util.concurrent.CountDownLatch;
 

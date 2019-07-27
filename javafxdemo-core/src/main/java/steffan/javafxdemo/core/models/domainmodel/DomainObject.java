@@ -5,11 +5,12 @@ import javafx.beans.property.ReadOnlyLongWrapper;
 
 import java.util.Objects;
 
-import static steffan.javafxdemo.core.models.util.WritableValueHelper.writableValueWithSetInPlatformThread;
+import static steffan.javafxdemo.core.models.domainmodel.ProxyProvider.proxy;
+
 
 public class DomainObject {
 
-    private ReadOnlyLongWrapper id = writableValueWithSetInPlatformThread(new ReadOnlyLongWrapper());
+    private ReadOnlyLongWrapper id = proxy(new ReadOnlyLongWrapper());
 
     public DomainObject(long id) {
         this.id.setValue(id);

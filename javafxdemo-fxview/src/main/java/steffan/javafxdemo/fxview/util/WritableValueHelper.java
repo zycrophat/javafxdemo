@@ -1,4 +1,4 @@
-package steffan.javafxdemo.core.models.util;
+package steffan.javafxdemo.fxview.util;
 
 import javafx.beans.value.WritableValue;
 import net.bytebuddy.ByteBuddy;

@@ -5,13 +5,13 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.util.Objects;
 
-import static steffan.javafxdemo.core.models.util.WritableValueHelper.writableValueWithSetInPlatformThread;
+import static steffan.javafxdemo.core.models.domainmodel.ProxyProvider.proxy;
 
 public class Contact extends DomainObject {
 
-    private ReadOnlyStringWrapper firstName = writableValueWithSetInPlatformThread(new ReadOnlyStringWrapper());
+    private ReadOnlyStringWrapper firstName = proxy(new ReadOnlyStringWrapper());
 
-    private ReadOnlyStringWrapper lastName = writableValueWithSetInPlatformThread(new ReadOnlyStringWrapper());
+    private ReadOnlyStringWrapper lastName = proxy(new ReadOnlyStringWrapper());
 
     public Contact() {
         super(-1);

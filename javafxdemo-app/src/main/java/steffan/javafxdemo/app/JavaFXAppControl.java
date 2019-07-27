@@ -6,6 +6,7 @@ import steffan.javafxdemo.core.control.ApplicationControl;
 import steffan.javafxdemo.core.control.CommandRunner;
 import steffan.javafxdemo.core.control.DaemonizingThreadFactory;
 import steffan.javafxdemo.core.control.ExecutorServiceCommandRunner;
+import steffan.javafxdemo.core.models.domainmodel.ProxyProvider;
 import steffan.javafxdemo.core.models.viewmodel.ContactList;
 import steffan.javafxdemo.core.persistence.api.PersistenceContext;
 import steffan.javafxdemo.core.view.api.UIViewException;
@@ -38,6 +39,7 @@ public class JavaFXAppControl implements ApplicationControl {
     @Override
     public void initialize() {
         try {
+            ProxyProvider.propertyProxyTransformer = uiViewManager.getProxyProvider();
             uiViewManager.initialize(this);
         } catch (UIViewException e) {
             e.printStackTrace();

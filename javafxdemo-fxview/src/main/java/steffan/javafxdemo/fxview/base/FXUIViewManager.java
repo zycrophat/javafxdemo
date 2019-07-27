@@ -1,5 +1,6 @@
 package steffan.javafxdemo.fxview.base;
 
+import javafx.beans.property.Property;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,10 +14,12 @@ import steffan.javafxdemo.core.view.api.UIView;
 import steffan.javafxdemo.core.view.api.UIViewException;
 import steffan.javafxdemo.core.view.api.UIViewManager;
 import steffan.javafxdemo.core.control.PlatformHelper;
+import steffan.javafxdemo.fxview.util.WritableValueHelper;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 
@@ -107,5 +110,10 @@ public class FXUIViewManager implements UIViewManager {
 
     public ApplicationControl getApplicationControl() {
         return applicationControl;
+    }
+
+    @Override
+    public Function<Property<?>, Property<?>> getProxyProvider() {
+        return WritableValueHelper::writableValueWithSetInPlatformThread;
     }
 }
